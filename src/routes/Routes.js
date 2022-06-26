@@ -1,7 +1,20 @@
 var express = require('express');
 var router = express.Router();
+const connect = require('connect')
+
 const {createBatteryBrand,batteryBrandGetService, batteryBrandFindOneController, batteryBrandDeleteController, batteryBrandUpdateController, bulkInsertionBatteryBrandController}=require('../Battery/Controllers/batteryBrand');
 const { categoryCreateController, categoryFindOneController, categoryDeleteController, categoryUpdateController, categoryGetService, bulkInsertionCategoryController } = require('../Battery/Controllers/categoryController');
+
+const {isAuthenticRequest} = require("../Middleware/apiAuth")
+
+
+const authMiddleware = (() => {
+  const chain = connect();
+  [isAuthenticRequest].forEach((middleware) => {
+      chain.use(middleware)
+  })
+  return chain
+})()
 
 
 router.get('/', (req, res) => {
@@ -61,7 +74,7 @@ router.get('/', (req, res) => {
  * @desc creates the category
  * @access Private
  */
- router.post("/categoryCreate", categoryCreateController);
+ router.post("/categoryCreate",isAuthenticRequest, categoryCreateController);
 
 
  /**
@@ -103,6 +116,4 @@ router.get('/', (req, res) => {
  router.put("/category/update/:id", categoryUpdateController);
  
  
-
-
 module.exports= router;

@@ -18,6 +18,7 @@ module.exports={
     SIGN_UP_REDIRECTION: 10,
     SUCCESS: 200,
     FAIL: 400,
+    NO_DATA : 403   ,
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     PAGE_NOT_FOUND: 404,

@@ -1,9 +1,9 @@
-const {batteryBrand}=require('../models/index')
+const {batteryBrand}=require('../../models')
 const {successResponseData,validationMessageKey, successResponseWithoutData, errorResponseWithoutData, errorResponseData, validationErrorResponseData}=require('../../Helper/Responce')
 const {isAuthenticRequest}=require('../../Middleware/apiAuth')
 // const battery_brand=db.Battery_Brand;
 // console.log(battery_brand);
-const Joi=require('joi')
+const Joi = require('joi')
 
 exports.createBatteryBrand=async (req,res,next)=>{
    body=req.body
@@ -34,6 +34,8 @@ exports.createBatteryBrand=async (req,res,next)=>{
         brandPosition: body["brandPosition"],
    })
    .then((i)=>{
+    
+
        successResponseData(res,i,'Data Added Successfully')
    }).catch((err)=>{
         console.log(err);
