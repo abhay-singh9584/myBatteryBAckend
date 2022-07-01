@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     categoryName: DataTypes.STRING,
     categoryDesc: DataTypes.STRING,
     categoryIcon: DataTypes.STRING,
-    categoryPosition: DataTypes.STRING
+    categoryPosition: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'category',

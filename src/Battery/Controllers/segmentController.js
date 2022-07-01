@@ -1,4 +1,4 @@
-const {batteryBrand}=require('../../models')
+const {segment}=require('../../models')
 const {successResponseData,validationMessageKey, successResponseWithoutData, errorResponseWithoutData, errorResponseData, validationErrorResponseData}=require('../../Helper/Responce')
 const {isAuthenticRequest}=require('../../Middleware/apiAuth')
 // const battery_brand=db.Battery_Brand;
@@ -6,14 +6,14 @@ const {isAuthenticRequest}=require('../../Middleware/apiAuth')
 const Joi = require('joi')
 const { SUCCESS, FAIL } = require('../../Helper/Constant')
 
-exports.createBatteryBrand=async (req,res,next)=>{
+exports.createSegment=async (req,res,next)=>{
    body=req.body
    const reqObj = {
-    brandName: Joi.string().required(),
-    brandLogo: Joi.string().required(),
-    brandDesc : Joi.string().optional().allow(''),
-    brandIcon: Joi.string().optional().allow(''),
-    brandPosition: Joi.number().required(),
+    segmentName: Joi.string().required(),
+    segmentDesc : Joi.string().optional().allow(''),
+    segmentIcon: Joi.string().optional().allow(''),
+    segmentPosition: Joi.string().required(),
+    segmentBrandId: Joi.string().optional(),
     };
 
     const schema = Joi.object(reqObj);
@@ -25,15 +25,14 @@ exports.createBatteryBrand=async (req,res,next)=>{
             (validationMessageKey("Service validation", error))
         );
     }
-
-   await batteryBrand.create({
-        brandName: body.brandName,
-        brandLogo: body.brandLogo,
-        brandDesc: body.brandDesc,
-        brandIcon: body.brandIcon,
-        brandPosition: body.brandPosition,
-   })
-   .then((data)=>{
+   await segment.create({
+        segmentName: body.segmentName,
+        segmentDesc: body.segmentDesc,
+        segmentIcon: body.segmentIcon,
+        segmentPosition: body.segmentPosition,
+        segmentBrandId: body.segmentBrandId,
+    })
+    .then((data)=>{
     if(!data){
         return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
     }
@@ -43,8 +42,8 @@ exports.createBatteryBrand=async (req,res,next)=>{
     })
 }
 
-exports.batteryBrandGetService=async (req,res,next)=>{
-    await batteryBrand.findAll()
+exports.segmentGetService=async (req,res,next)=>{
+    await segment.findAll()
     .then((data)=>{
         if(!data){
             return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
@@ -55,8 +54,8 @@ exports.batteryBrandGetService=async (req,res,next)=>{
      })
 }
 
-exports.batteryBrandFindOneController = async (req, res,next) => {
-    await batteryBrand.findByPk(req.params.id)
+exports.segmentFindOneController = async (req, res,next) => {
+    await segment.findByPk(req.params.id)
     .then((data)=>{
         if(!data){
             return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
@@ -67,18 +66,18 @@ exports.batteryBrandFindOneController = async (req, res,next) => {
      })
 }
 
-exports.batteryBrandDeleteController = async (req , res ,next) => {
-    let batteryBrandExistingData=await batteryBrand.findByPk(req.params.id)
-    if(!batteryBrandExistingData){
+exports.segmentDeleteController = async (req , res ,next) => {
+    let segmentExistingData=await segment.findByPk(req.params.id)
+    if(!segmentExistingData){
         errorResponseWithoutData(res,'No data found')
     }
-    await batteryBrand.destroy({
+    await segment.destroy({
         where: {
           id: req.params.id
         }
       }).then((data)=>{
         if(!data){
-            return errorResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
         }
         return successResponseWithoutData(res,res.__('Data Deleated Successfully'),SUCCESS)
     }).catch((err)=>{ 
@@ -86,14 +85,14 @@ exports.batteryBrandDeleteController = async (req , res ,next) => {
      })
 }
 
-exports.batteryBrandUpdateController=async (req,res,next)=>{
+exports.segmentUpdateController=async (req,res,next)=>{
     body=req.body
     const reqObj = {
-        brandName: Joi.string().required(),
-        brandLogo: Joi.string().required(),
-        brandDesc : Joi.string().optional().allow(''),
-        brandIcon: Joi.string().optional().allow(''),
-        brandPosition: Joi.number().required(),
+        segmentName: Joi.string().required(),
+        segmentDesc : Joi.string().optional().allow(''),
+        segmentIcon: Joi.string().optional().allow(''),
+        segmentPosition: Joi.string().required(),
+        segmentBrandId: Joi.string().required(),
         };
     
         const schema = Joi.object(reqObj);
@@ -106,12 +105,12 @@ exports.batteryBrandUpdateController=async (req,res,next)=>{
             );
         }
     
-    await batteryBrand.update({ 
-        brandName: body.brandName,
-        brandLogo: body.brandLogo,
-        brandDesc: body.brandDesc,
-        brandIcon: body.brandIcon,
-        brandPosition: body.brandPosition,
+    await segment.update({ 
+        segmentName: body.segmentName,
+        segmentDesc: body.segmentDesc,
+        segmentIcon: body.segmentIcon,
+        segmentPosition: body.segmentPosition,
+        segmentBrandId: body.segmentLogo,
      }, {
         where: {
           id:req.params.id
@@ -126,17 +125,17 @@ exports.batteryBrandUpdateController=async (req,res,next)=>{
      })
 }
 
-// exports.bulkInsertionBatteryBrandController = (req,res,next) => {
+// exports.bulkInsertionsegmentController = (req,res,next) => {
 // 	isAuthenticRequest(req,res,next)
 //     body=req.body
 //     body.JSONData.forEach(data => {
-//         batteryBrand.findAll({
+//         segment.findAll({
 //             where: {
-//               brandName:data.brandName
+//               brandId:data.brandId
 //             }
 //           }).then(duplicateData => {
 //             if(!(duplicateData.length > 0)){
-//                 batteryBrand.create(data)
+//                 segment.create(data)
 //                     .then((data) => successResponseData(res,data,200,'Successfull Bulk Inserstion'))
 //                     .catch((err) =>  errorResponseWithoutData(res,'Bul insertion failed'))
 //             } 

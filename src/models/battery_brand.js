@@ -1,6 +1,9 @@
 const {
   Model
 } = require('sequelize');
+
+const {segment}=require('./index')
+
 module.exports = (sequelize, DataTypes) => {
   class batteryBrand extends Model {
     /**
@@ -10,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // batteryBrand.hasOne(models,segment,{
+      //   sourceKey: 'brandId',
+      //   foreignKey: 'id'
+      // })
+      
     }
   }
   batteryBrand.init({
@@ -17,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     brandLogo: DataTypes.STRING,
     brandDesc: DataTypes.STRING,
     brandIcon: DataTypes.STRING,
-    brandPosition: DataTypes.STRING
+    brandPosition: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'batteryBrand',

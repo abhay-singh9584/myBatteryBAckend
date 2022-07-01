@@ -20,8 +20,8 @@ module.exports = {
       segmentPosition: {
         type: Sequelize.INTEGER
       },
-      segmentBrandName: {
-        type: Sequelize.STRING
+      segmentBrandId: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

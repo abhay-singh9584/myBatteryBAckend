@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
  * @desc creates the battery brands
  * @access Private
  */
- router.post("/batteryBrandCreate", createBatteryBrand);
+ router.post("/batteryBrandCreate",isAuthenticRequest, createBatteryBrand);
 
 
  /**
@@ -42,21 +42,21 @@ router.get('/', (req, res) => {
   * @desc finds all battery brands
   * @access Private
   */
- router.get("/getBatteryBrand", batteryBrandGetService);
+ router.get("/getBatteryBrand",isAuthenticRequest, batteryBrandGetService);
  
  /**
   * @route GET /getBatteryBrand/:id
   * @desc finds all battery brands with given id
   * @access Private
   */
-  router.get("/getBatteryBrand/:id", batteryBrandFindOneController);
+  router.get("/getBatteryBrand/:id",isAuthenticRequest, batteryBrandFindOneController);
  
  /**
   * @route DELETE /batteryBrand/delete/:id
   * @desc deletes the batteryBrand with given id
   * @access Private
   */
- router.delete("/batteryBrand/delete/:id", batteryBrandDeleteController);
+ router.delete("/batteryBrand/delete/:id",isAuthenticRequest, batteryBrandDeleteController);
  
  
  /**
@@ -64,7 +64,7 @@ router.get('/', (req, res) => {
   * @desc Updates the batteryBrand with given id
   * @access Private
   */
- router.put("/batteryBrand/update/:id",batteryBrandUpdateController);
+ router.put("/batteryBrand/update/:id",isAuthenticRequest,batteryBrandUpdateController);
  
 
 //Category
@@ -74,7 +74,7 @@ router.get('/', (req, res) => {
  * @desc creates the category
  * @access Private
  */
- router.post("/categoryCreate",isAuthenticRequest, categoryCreateController);
+ router.post("/categoryCreate",isAuthenticRequest,categoryCreateController);
 
 
  /**
@@ -82,7 +82,7 @@ router.get('/', (req, res) => {
   * @desc creates the category in bulk
   * @access Private
   */
-  router.post("/bulkInsertCategory", bulkInsertionCategoryController);
+  // router.post("/bulkInsertCategory",isAuthenticRequest, bulkInsertionCategoryController);
  
  
  /**
@@ -90,14 +90,14 @@ router.get('/', (req, res) => {
   * @desc finds all categories
   * @access Private
   */
- router.get("/getCategory",categoryGetService);
+ router.get("/getCategory",isAuthenticRequest,categoryGetService);
  
  /**
   * @route GET /getCategory/:id
   * @desc finds all categories with given id
   * @access Private
   */
-  router.get("/getCategory/:id",categoryFindOneController);
+  router.get("/getCategory/:id",isAuthenticRequest,categoryFindOneController);
  
  
  /**
@@ -105,7 +105,7 @@ router.get('/', (req, res) => {
   * @desc deletes the category with given id
   * @access Private
   */
- router.delete("/category/delete/:id", categoryDeleteController);
+ router.delete("/category/delete/:id",isAuthenticRequest, categoryDeleteController);
  
  
  /**
@@ -113,7 +113,215 @@ router.get('/', (req, res) => {
   * @desc Updates the category with given id
   * @access Private
   */
- router.put("/category/update/:id", categoryUpdateController);
+ router.put("/category/update/:id",isAuthenticRequest, categoryUpdateController);
  
+
+ //group-----------------
+  
+//  const{
+//   groupCreateController,
+//   groupGetController,
+//   groupDeleteController,
+//   groupUpdateController,
+//   groupFindOneController,r
+// } = require("../Battery/Controllers/groupController");
+
+
+/**
+* @route POST /createGroup
+* @desc Creates BatteyModel
+* @access Private
+*/
+// router.post("/createGroup",isAuthenticRequest, groupCreateController);
+
+
+/**
+* @route GET /getGroup
+* @desc finds all BatteyModel
+* @access Private
+*/
+// router.get("/getGroup",isAuthenticRequest,groupGetController);
+
+
+/**
+* @route GET /getGroup/:id
+* @desc finds all BatteyModel with given id
+* @access Private
+*/
+//  router.get("/getGroup/:id",isAuthenticRequest,groupFindOneController);
+
+
+/**
+* @route DELETE /group/delete/:id
+* @desc Deletes the given id
+* @access Private
+*/
+// router.delete("/group/delete/:id",isAuthenticRequest, groupDeleteController);
+
+
+/**
+* @route PUT /group/update/:id
+* @desc Updates the given id
+* @access Private
+*/
+// router.put("/group/update/:id",isAuthenticRequest,groupUpdateController);
+
+// subcategory ----
+
+const {
+	subCategoryCreateController,
+	subCategoryGetService,
+	subCategoryDeleteController,
+    subCategoryUpdateController,
+    subCategoryFindOneController,
+} = require("../Battery/Controllers/subCategoryController");
+
+/**
+ * @route POST /createSubCategory
+ * @desc creates the category
+ * @access Private
+ */
+router.post("/createSubCategory",isAuthenticRequest, subCategoryCreateController);
+
+/**
+ * @route POST /bulkInsertionSubCategory
+ * @desc creates the category in bulk
+ * @access Private
+ */
+//  router.post("/bulkInsertionSubCategory",isAuthenticRequest, subCategoryBulkInsertionController);
+
+
+/**
+ * @route GET /getSubCategory
+ * @desc finds all subCategories
+ * @access Private
+ */
+router.get("/getSubCategory",isAuthenticRequest, subCategoryGetService);
+
+/**
+ * @route GET /getSubCategory/:id
+ * @desc finds subCategories with given id
+ * @access Private
+ */
+ router.get("/getSubCategory/:id",isAuthenticRequest, subCategoryFindOneController);
+
+
+/**
+ * @route DELETE /subCategory/delete/:id
+ * @desc Deletes the given id
+ * @access Private
+ */
+router.delete("/subCategory/delete/:id",isAuthenticRequest, subCategoryDeleteController);
+
+
+/**
+ * @route PUT /subCategory/update/:id
+ * @desc Updates the given id
+ * @access Private
+ */
+router.put("/subCategory/update/:id",isAuthenticRequest, subCategoryUpdateController);
+
+
+	
+
+const {oemBrandCreateController,
+	oemBrandDeleteController,
+    oemBrandUpdateController,
+    oemBrandFindOneController, oemBrandGetService } = require('../Battery/Controllers/oemBrandController');
+
+
+/**
+ * @route POST /createOemBrand
+ * @desc Creates Oem brand
+ * @access Private
+ */
+ router.post("/createOemBrand",isAuthenticRequest, oemBrandCreateController);
+
+ /**
+ * @route POST /bulkInsertOemBrand
+ * @desc Creates Oem brand in bulk
+ * @access Private
+ */
+  // router.post("/bulkInsertOemBrand",isAuthenticRequest, oemBrandBuilkInsertionController);
+
+
+ /**
+  * @route GET /getoemBrand
+  * @desc finds all oemBrand
+  * @access Private
+  */
+ router.get("/getOemBrand",isAuthenticRequest, oemBrandGetService);
  
+  /**
+  * @route GET /getoemBrand/:id
+  * @desc finds all oemBrand with given id
+  * @access Private
+  */
+   router.get("/getOemBrand/:id",isAuthenticRequest, oemBrandFindOneController);
+ 
+
+ /**
+  * @route DELETE /oemBrand/delete/:id
+  * @desc Deletes the given id
+  * @access Private
+  */
+ router.delete("/oemBrand/delete/:id",isAuthenticRequest, oemBrandDeleteController);
+ 
+/**
+ * @route PUT /oemBrand/update/:id
+ * @desc Updates the given id
+ * @access Private
+ */
+ router.put("/oemBrand/update/:id",isAuthenticRequest, oemBrandUpdateController);
+
+//  segment ----
+const {segmentDeleteController,createSegment,segmentGetService,segmentFindOneController,segmentUpdateController}=require('../Battery/Controllers/segmentController')
+
+/**
+* @route POST /createSegment
+* @desc Creates segment
+* @access Private
+*/
+router.post("/createSegment",isAuthenticRequest,createSegment );
+
+
+/**
+* @route POST /bulkInsertionSegment
+* @desc Creates segment in bulk
+* @access Private
+*/
+// router.post("/bulkInsertionSegment",isAuthenticRequest, bulkInsertionSegmentController);
+
+
+/**
+* @route GET /getSegment
+* @desc finds all segments
+* @access Private
+*/
+router.get("/getSegment",isAuthenticRequest, segmentGetService);
+
+/**
+* @route GET /getSegment/:id
+* @desc finds segments with given id 
+* @access Private
+*/
+ router.get("/getSegment/:id",isAuthenticRequest, segmentFindOneController);
+
+
+/**
+* @route DELETE /segment/delete/:id
+* @desc Deletes the given id
+* @access Private
+*/
+router.delete("/segment/delete/:id",isAuthenticRequest, segmentDeleteController);
+
+
+/**
+* @route PUT /segment/update/:id
+* @desc Updates the given id
+* @access Private
+*/
+router.put("/segment/update/:id",isAuthenticRequest, segmentUpdateController);
+
+
 module.exports= router;

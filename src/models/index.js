@@ -1,7 +1,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const {Sequelize,DataTypes} = require('sequelize');
+const {Sequelize,DataTypes, HasOne} = require('sequelize');
+const subcategory = require('./subcategory');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '../../config/config.js')[env];
@@ -33,7 +34,6 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.Battery_Brand=require('./battery_brand')[sequelize,DataTypes];
-db.Category=require('./category')[sequelize,DataTypes]
+db.Segment=require('./segment')[sequelize,DataTypes]
 
 module.exports = db;

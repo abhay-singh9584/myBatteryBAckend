@@ -1,19 +1,16 @@
-const {category}=require('../../models/index')
-const {successResponseData, successResponseWithoutData, errorResponseWithoutData, errorResponseData, validationErrorResponseData, validationMessageKey}=require('../../Helper/Responce')
-
-const {SUCCESS, FAIL,NO_DATA} = require("../../Helper/Constant")
-const Joi=require('joi')
-
+const {oemModel}=require('../../models/index')
+const Joi=require('joi');
+const { validationErrorResponseData, validationMessageKey, successResponseWithoutData, successResponseData, errorResponseWithoutData } = require('../../Helper/Responce');
+const { NO_DATA, SUCCESS, FAIL } = require('../../Helper/Constant');
 module.exports = {
 
-    categoryCreateController : async (req,res,next)=>{
+    oemModelCreateController : async (req,res,next)=>{
         
         body=req.body
         const reqObj = {
-            categoryName: Joi.string().required(),
-            categoryDesc : Joi.string().optional().allow(''),
-            categoryIcon: Joi.string().optional().allow(''),
-            categoryPosition: Joi.number().required(),
+            oemModel: Joi.string().required(),
+            oemModelImage : Joi.string().optional().allow(''),
+            OEMB: Joi.string().optional().allow(''),
             };
         
             const schema = Joi.object(reqObj);
@@ -26,11 +23,10 @@ module.exports = {
                 );
             }
 
-        await category.create({
-             categoryName: body.categoryName,
-             categoryDesc: body.categoryDesc,
-             categoryIcon: body.categoryIcon,
-             categoryPosition: body.categoryPosition,
+        await oemModel.create({
+             oemModel: body.oemModel,
+             oemModelImage: body.oemModelImage,
+             OEMB: body.OEMB,
         })
         .then((data)=>{
             if(!data){
@@ -42,8 +38,8 @@ module.exports = {
          })
      },
 
-     categoryGetService : async (req,res,next)=>{
-        await category.findAll()
+     oemModelGetService : async (req,res,next)=>{
+        await oemModel.findAll()
         .then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
@@ -54,8 +50,8 @@ module.exports = {
          })
     },
 
-     categoryFindOneController : async (req, res,next) => {
-        await category.findByPk(req.params.id)
+     oemModelFindOneController : async (req, res,next) => {
+        await oemModel.findByPk(req.params.id)
         .then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
@@ -66,8 +62,8 @@ module.exports = {
          })
     },
 
-    categoryDeleteController : async (req , res ,next) => {
-        await category.destroy({
+    oemModelDeleteController : async (req , res ,next) => {
+        await oemModel.destroy({
             where: {
               id: req.params.id
             }
@@ -81,14 +77,13 @@ module.exports = {
          })
     },
 
-    categoryUpdateController : async (req,res,next)=>{
+    oemModelUpdateController : async (req,res,next)=>{
         body=req.body
 
         const reqObj = {
-            categoryName: Joi.string().required(),
-            categoryDesc : Joi.string().optional().allow(''),
-            categoryIcon: Joi.string().optional().allow(''),
-            categoryPosition: Joi.number().required(),
+            oemModel: Joi.string().required(),
+            oemModelImage : Joi.string().optional().allow(''),
+            OEMB: Joi.string().optional().allow(''),
             };
         
             const schema = Joi.object(reqObj);
@@ -101,11 +96,10 @@ module.exports = {
                 );
             }
 
-        await category.update({ 
-            categoryName: body.categoryName,
-            categoryDesc: body.categoryDesc,
-            categoryIcon: body.categoryIcon,
-            categoryPosition: body.categoryPosition,
+        await oemModel.update({ 
+            oemModel: body.oemModel,
+            oemModelImage: body.oemModelImage,
+            OEMB: body.OEMB,
          }, {
             where: {
               id:req.params.id
@@ -119,27 +113,4 @@ module.exports = {
             return errorResponseWithoutData(res,'Something went wrong',FAIL)
          })
     },
-
-//     bulkInsertionCategoryController : async (req,res,next) => {
-//         body=req.body
-//         body.JSONData.forEach(data => {
-//             category.findAll({
-//                 where: {
-//                   brandName:data.brandName
-//                 }
-//               }).then(duplicateData => {
-//                 if(!(duplicateData.length > 0)){
-//                     category.create(data)
-//                         .then((data) => successResponseData(res,data,200,'Successfull Bulk Inserstion'))
-//                         .catch((err) =>  errorResponseWithoutData(res,'Bul insertion failed'))
-//                 } 
-//                 else{					
-//                     errorResponseWithoutData(res,'Unique data inserted,failed for duplicate data')					
-//                 }
-
-//             }) 
-//             .catch(err => errorResponseWithoutData(res,'Failed to insert data'));
-//         })
-//     }
-
 }

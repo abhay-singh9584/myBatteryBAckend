@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'subcategory',
+    tableName: 'subcategories'
   });
   return subcategory;
 };

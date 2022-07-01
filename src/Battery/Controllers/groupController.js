@@ -1,19 +1,17 @@
-const {category}=require('../../models/index')
-const {successResponseData, successResponseWithoutData, errorResponseWithoutData, errorResponseData, validationErrorResponseData, validationMessageKey}=require('../../Helper/Responce')
-
-const {SUCCESS, FAIL,NO_DATA} = require("../../Helper/Constant")
-const Joi=require('joi')
+const { SUCCESS, FAIL, NO_DATA } = require('../../Helper/Constant');
+const { successResponseData, successResponseWithoutData, errorResponseWithoutData, validationMessageKey, validationErrorResponseData } = require('../../Helper/Responce');
+const {groups}=require('../../models/index')
 
 module.exports = {
 
-    categoryCreateController : async (req,res,next)=>{
+    groupCreateController : async (req,res,next)=>{
         
         body=req.body
         const reqObj = {
-            categoryName: Joi.string().required(),
-            categoryDesc : Joi.string().optional().allow(''),
-            categoryIcon: Joi.string().optional().allow(''),
-            categoryPosition: Joi.number().required(),
+            groupName: Joi.string().required(),
+            groupDesc : Joi.string().optional().allow(''),
+            groupIcon: Joi.string().optional().allow(''),
+            groupBasedOn: Joi.string().required(),
             };
         
             const schema = Joi.object(reqObj);
@@ -26,11 +24,11 @@ module.exports = {
                 );
             }
 
-        await category.create({
-             categoryName: body.categoryName,
-             categoryDesc: body.categoryDesc,
-             categoryIcon: body.categoryIcon,
-             categoryPosition: body.categoryPosition,
+        await groups.create({
+             groupName: body.groupName,
+             groupDesc: body.groupDesc,
+             groupIcon: body.groupIcon,
+             groupBasedOn: body.groupBasedOn,
         })
         .then((data)=>{
             if(!data){
@@ -42,8 +40,8 @@ module.exports = {
          })
      },
 
-     categoryGetService : async (req,res,next)=>{
-        await category.findAll()
+     groupGetService : async (req,res,next)=>{
+        await group.findAll()
         .then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
@@ -54,8 +52,8 @@ module.exports = {
          })
     },
 
-     categoryFindOneController : async (req, res,next) => {
-        await category.findByPk(req.params.id)
+     groupFindOneController : async (req, res,next) => {
+        await group.findByPk(req.params.id)
         .then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
@@ -66,8 +64,8 @@ module.exports = {
          })
     },
 
-    categoryDeleteController : async (req , res ,next) => {
-        await category.destroy({
+    groupDeleteController : async (req , res ,next) => {
+        await group.destroy({
             where: {
               id: req.params.id
             }
@@ -81,14 +79,14 @@ module.exports = {
          })
     },
 
-    categoryUpdateController : async (req,res,next)=>{
+    groupUpdateController : async (req,res,next)=>{
         body=req.body
 
         const reqObj = {
-            categoryName: Joi.string().required(),
-            categoryDesc : Joi.string().optional().allow(''),
-            categoryIcon: Joi.string().optional().allow(''),
-            categoryPosition: Joi.number().required(),
+            groupName: Joi.string().required(),
+            groupDesc : Joi.string().optional().allow(''),
+            groupIcon: Joi.string().optional().allow(''),
+            groupBasedOn: Joi.string().required(),
             };
         
             const schema = Joi.object(reqObj);
@@ -101,11 +99,11 @@ module.exports = {
                 );
             }
 
-        await category.update({ 
-            categoryName: body.categoryName,
-            categoryDesc: body.categoryDesc,
-            categoryIcon: body.categoryIcon,
-            categoryPosition: body.categoryPosition,
+        await group.update({ 
+            groupName: body.groupName,
+            groupDesc: body.groupDesc,
+            groupIcon: body.groupIcon,
+            groupPosition: body.groupPosition,
          }, {
             where: {
               id:req.params.id
@@ -119,27 +117,4 @@ module.exports = {
             return errorResponseWithoutData(res,'Something went wrong',FAIL)
          })
     },
-
-//     bulkInsertionCategoryController : async (req,res,next) => {
-//         body=req.body
-//         body.JSONData.forEach(data => {
-//             category.findAll({
-//                 where: {
-//                   brandName:data.brandName
-//                 }
-//               }).then(duplicateData => {
-//                 if(!(duplicateData.length > 0)){
-//                     category.create(data)
-//                         .then((data) => successResponseData(res,data,200,'Successfull Bulk Inserstion'))
-//                         .catch((err) =>  errorResponseWithoutData(res,'Bul insertion failed'))
-//                 } 
-//                 else{					
-//                     errorResponseWithoutData(res,'Unique data inserted,failed for duplicate data')					
-//                 }
-
-//             }) 
-//             .catch(err => errorResponseWithoutData(res,'Failed to insert data'));
-//         })
-//     }
-
 }
