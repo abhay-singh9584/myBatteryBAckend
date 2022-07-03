@@ -13,7 +13,7 @@ exports.createSegment=async (req,res,next)=>{
     segmentDesc : Joi.string().optional().allow(''),
     segmentIcon: Joi.string().optional().allow(''),
     segmentPosition: Joi.string().required(),
-    segmentBrandId: Joi.string().optional(),
+    segmentBrandName: Joi.string().optional(),
     };
 
     const schema = Joi.object(reqObj);
@@ -25,18 +25,33 @@ exports.createSegment=async (req,res,next)=>{
             (validationMessageKey("Service validation", error))
         );
     }
-   await segment.create({
-        segmentName: body.segmentName,
-        segmentDesc: body.segmentDesc,
-        segmentIcon: body.segmentIcon,
-        segmentPosition: body.segmentPosition,
-        segmentBrandId: body.segmentBrandId,
-    })
-    .then((data)=>{
-    if(!data){
-        return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+    await batteryBrand.findOne({
+        where:{
+        brandName: body.brandName,
+        brandLogo: body.brandLogo,
+        brandDesc: body.brandDesc,
+        brandIcon: body.brandIcon,
+        brandPosition: body.brandPosition,
     }
-    return successResponseData(res,data,SUCCESS,res.__('Data Added Successfully'))
+    }).then(async (data)=>{
+        if(data){
+            return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
+        }
+    await segment.create({
+            segmentName: body.segmentName,
+            segmentDesc: body.segmentDesc,
+            segmentIcon: body.segmentIcon,
+            segmentPosition: body.segmentPosition,
+            segmentBrandName: body.segmentBrandName,
+        })
+        .then((data)=>{
+        if(!data){
+            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
+        }
+        return successResponseData(res,data,SUCCESS,res.__('Data Added Successfully'))
+        }).catch((err)=>{ 
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+        })
     }).catch((err)=>{ 
         return errorResponseWithoutData(res,'Something went wrong',FAIL)
     })
@@ -46,11 +61,11 @@ exports.segmentGetService=async (req,res,next)=>{
     await segment.findAll()
     .then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
         }
         return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
+        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
 }
 
@@ -58,30 +73,30 @@ exports.segmentFindOneController = async (req, res,next) => {
     await segment.findByPk(req.params.id)
     .then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
         }
         return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
+        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
 }
 
 exports.segmentDeleteController = async (req , res ,next) => {
     let segmentExistingData=await segment.findByPk(req.params.id)
     if(!segmentExistingData){
-        errorResponseWithoutData(res,'No data found')
+        errorResponseWithoutData(res,'No Segment Data found')
     }
     await segment.destroy({
         where: {
-          id: req.params.id
+          iW: reW.params.id
         }
       }).then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
         }
         return successResponseWithoutData(res,res.__('Data Deleated Successfully'),SUCCESS)
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
+        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
 }
 
@@ -92,7 +107,7 @@ exports.segmentUpdateController=async (req,res,next)=>{
         segmentDesc : Joi.string().optional().allow(''),
         segmentIcon: Joi.string().optional().allow(''),
         segmentPosition: Joi.string().required(),
-        segmentBrandId: Joi.string().required(),
+        segmentBrandName: Joi.string().required(),
         };
     
         const schema = Joi.object(reqObj);
@@ -110,18 +125,18 @@ exports.segmentUpdateController=async (req,res,next)=>{
         segmentDesc: body.segmentDesc,
         segmentIcon: body.segmentIcon,
         segmentPosition: body.segmentPosition,
-        segmentBrandId: body.segmentLogo,
+        segmentBrandName: body.segmentLogo,
      }, {
         where: {
           id:req.params.id
         }
       }).then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
         }
         return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
+        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
 }
 
@@ -131,7 +146,7 @@ exports.segmentUpdateController=async (req,res,next)=>{
 //     body.JSONData.forEach(data => {
 //         segment.findAll({
 //             where: {
-//               brandId:data.brandId
+//               brandName:data.brandName
 //             }
 //           }).then(duplicateData => {
 //             if(!(duplicateData.length > 0)){

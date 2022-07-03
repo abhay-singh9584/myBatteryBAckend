@@ -2,7 +2,7 @@ const {
   Model
 } = require('sequelize');
 
-const {batteyBrand}=require('./index')
+// const {batteyBrand}=require('./index')
 
 module.exports = (sequelize, DataTypes) => {
   class segment extends Model {
@@ -20,13 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     segmentDesc: DataTypes.STRING,
     segmentIcon: DataTypes.STRING,
     segmentPosition: DataTypes.INTEGER,
-    segmentBrandId:{
-      type: DataTypes.INTEGER,
-      references: {
-          model: batteyBrand,
-          key: "id"
-      }
-  }
+    segmentBrandId: DataTypes.INTEGER,
+
   }, {
     sequelize,
     modelName: 'segment',

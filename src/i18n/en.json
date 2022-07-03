@@ -4,5 +4,13 @@
 	"Data Deleted Successfully": "Data Deleted Successfully",
 	"No data Found": "No data Found",
 	"Data Updated Successfully": "Data Updated Successfully",
-	"Data Deleated Successfully": "Data Deleated Successfully"
+	"Data Deleated Successfully": "Data Deleated Successfully",
+	"Battery Brand Data Found Successfully": "Battery Brand Data Found Successfully",
+	"Sub Category Data Found Successfully": "Sub Category Data Found Successfully",
+	"Battery Brand Data Added Successfully": "Battery Brand Data Added Successfully",
+	"No Data Found": "No Data Found",
+	"Duplicate Data Cannot be added": "Duplicate Data Cannot be added",
+	"Battery Brand Data Deleted Successfully": "Battery Brand Data Deleted Successfully",
+	"Duplicate data cannot be added": "Duplicate data cannot be added",
+	"Category Data Found Successfully": "Category Data Found Successfully"
 }

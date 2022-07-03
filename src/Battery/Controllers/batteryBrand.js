@@ -4,7 +4,7 @@ const {isAuthenticRequest}=require('../../Middleware/apiAuth')
 // const battery_brand=db.Battery_Brand;
 // console.log(battery_brand);
 const Joi = require('joi')
-const { SUCCESS, FAIL } = require('../../Helper/Constant')
+const { SUCCESS, FAIL, NO_DATA, CONFLICT } = require('../../Helper/Constant')
 
 exports.createBatteryBrand=async (req,res,next)=>{
    body=req.body
@@ -25,19 +25,35 @@ exports.createBatteryBrand=async (req,res,next)=>{
             (validationMessageKey("Service validation", error))
         );
     }
+    await batteryBrand.findOne({
+            where:{
+            brandName: body.brandName,
+            brandLogo: body.brandLogo,
+            brandDesc: body.brandDesc,
+            brandIcon: body.brandIcon,
+            brandPosition: body.brandPosition,
+        }
+    }).then(async (data)=>{
+        if(data){
+            return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
+        }
+        
+        await batteryBrand.create({
+            brandName: body.brandName,
+            brandLogo: body.brandLogo,
+            brandDesc: body.brandDesc,
+            brandIcon: body.brandIcon,
+            brandPosition: body.brandPosition,
+        })
+        .then((battery_data)=>{
+            if(!battery_data){
+                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            }
+            return successResponseData(res,battery_data,SUCCESS,res.__('Battery Brand Data Found Successfully'))
+            }).catch((err)=>{ 
+                return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            })
 
-   await batteryBrand.create({
-        brandName: body.brandName,
-        brandLogo: body.brandLogo,
-        brandDesc: body.brandDesc,
-        brandIcon: body.brandIcon,
-        brandPosition: body.brandPosition,
-   })
-   .then((data)=>{
-    if(!data){
-        return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
-    }
-    return successResponseData(res,data,SUCCESS,res.__('Data Added Successfully'))
     }).catch((err)=>{ 
         return errorResponseWithoutData(res,'Something went wrong',FAIL)
     })
@@ -49,7 +65,8 @@ exports.batteryBrandGetService=async (req,res,next)=>{
         if(!data){
             return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
         }
-        return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
+        // console.log(data);
+        return successResponseData(res,data,SUCCESS,res.__('Battery Brand Data Found Successfully'))
     }).catch((err)=>{ 
         return errorResponseWithoutData(res,'Something went wrong',FAIL)
      })
@@ -80,7 +97,7 @@ exports.batteryBrandDeleteController = async (req , res ,next) => {
         if(!data){
             return errorResponseWithoutData(res, res.__('No data Found'),NO_DATA)
         }
-        return successResponseWithoutData(res,res.__('Data Deleated Successfully'),SUCCESS)
+        return successResponseWithoutData(res,res.__('Battery Brand Data Deleted Successfully'),SUCCESS)
     }).catch((err)=>{ 
         return errorResponseWithoutData(res,'Something went wrong',FAIL)
      })
@@ -120,7 +137,7 @@ exports.batteryBrandUpdateController=async (req,res,next)=>{
         if(!data){
             return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
         }
-        return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
+        return successResponseWithoutData(res,res.__('Battery Brand Data Updated Successfully'),SUCCESS)
     }).catch((err)=>{ 
         return errorResponseWithoutData(res,'Something went wrong',FAIL)
      })

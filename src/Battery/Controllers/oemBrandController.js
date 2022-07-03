@@ -22,31 +22,45 @@ module.exports = {
                     (validationMessageKey("Service validation", error))
                 );
             }
-
-        await oemBrand.create({
-             OEMBrand: body.OEMBrand,
-             OEMBrandImage: body.OEMBrandImage,
-             OEMB: body.OEMB,
-        })
-        .then((data)=>{
-            if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+        await batteryBrand.findOne({
+            where:{
+            brandName: body.brandName,
+            brandLogo: body.brandLogo,
+            brandDesc: body.brandDesc,
+            brandIcon: body.brandIcon,
+            brandPosition: body.brandPosition,
+        }
+        }).then(async (data)=>{
+            if(data){
+                return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Added Successfully'))
+            await oemBrand.create({
+                OEMBrand: body.OEMBrand,
+                OEMBrandImage: body.OEMBrandImage,
+                OEMB: body.OEMB,
+            })
+            .then((data)=>{
+                if(!data){
+                    return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
+                }
+                return successResponseData(res,data,SUCCESS,res.__('OEM Brand Data Added Successfully'))
+            }).catch((err)=>{ 
+                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            })
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,'Something went wrong',FAIL)
-         })
+        })
      },
 
      oemBrandGetService : async (req,res,next)=>{
         await oemBrand.findAll()
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
+            return successResponseData(res,data,SUCCESS,res.__('OEM Brand Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -54,11 +68,11 @@ module.exports = {
         await oemBrand.findByPk(req.params.id)
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
+            return successResponseData(res,data,SUCCESS,res.__('OEM Brand Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -69,11 +83,11 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
-            return successResponseWithoutData(res,res.__('Data Deleted Successfully'),SUCCESS)
+            return successResponseWithoutData(res,res.__('OEM Brand Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -106,11 +120,11 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
-            return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
+            return successResponseWithoutData(res,res.__('OEM Brand Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 }

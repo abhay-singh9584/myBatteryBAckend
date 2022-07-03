@@ -31,9 +31,15 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+try {
+   sequelize.authenticate();
+  console.log('Connection has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.Segment=require('./segment')[sequelize,DataTypes]
+// db.Segment=require('./segment')[sequelize,DataTypes]
 
 module.exports = db;

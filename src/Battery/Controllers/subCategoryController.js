@@ -23,32 +23,46 @@ module.exports = {
                     (validationMessageKey("Service validation", error))
                 );
             }
-
-        await subcategory.create({
-             subcategoryName: body.subcategoryName,
-             subcategoryDesc: body.subcategoryDesc,
-             subcategoryIcon: body.subcategoryIcon,
-             subcategoryPosition: body.subcategoryPosition,
-        })
-        .then((data)=>{
-            if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+        await batteryBrand.findOne({
+            where:{
+            brandName: body.brandName,
+            brandLogo: body.brandLogo,
+            brandDesc: body.brandDesc,
+            brandIcon: body.brandIcon,
+            brandPosition: body.brandPosition,
+        }
+        }).then(async (data)=>{
+            if(data){
+                return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Added Successfully'))
+            await subcategory.create({
+                subcategoryName: body.subcategoryName,
+                subcategoryDesc: body.subcategoryDesc,
+                subcategoryIcon: body.subcategoryIcon,
+                subcategoryPosition: body.subcategoryPosition,
+            })
+            .then((data)=>{
+                if(!data){
+                    return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
+                }
+                return successResponseData(res,data,SUCCESS,res.__('Sub Category Data Added Successfully'))
+            }).catch((err)=>{ 
+                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            })
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,'Something went wrong',FAIL)
-         })
+        })
      },
 
      subCategoryGetService : async (req,res,next)=>{
         await subcategory.findAll()
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
+            return successResponseData(res,data,SUCCESS,res.__('Sub Category Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -56,11 +70,11 @@ module.exports = {
         await subcategory.findByPk(req.params.id)
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
+            return successResponseData(res,data,SUCCESS,res.__('Sub Category Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -71,11 +85,11 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
             }
-            return successResponseWithoutData(res,res.__('Data Deleted Successfully'),SUCCESS)
+            return successResponseWithoutData(res,res.__('Sub Category Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -110,11 +124,11 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
             }
-            return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
+            return successResponseWithoutData(res,res.__('Sub Category Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 }

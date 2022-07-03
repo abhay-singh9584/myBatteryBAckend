@@ -19,6 +19,7 @@ module.exports={
     SUCCESS: 200,
     FAIL: 400,
     NO_DATA : 403   ,
+    CONFLICT:409,
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     PAGE_NOT_FOUND: 404,

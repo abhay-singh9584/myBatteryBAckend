@@ -25,32 +25,46 @@ module.exports = {
                     (validationMessageKey("Service validation", error))
                 );
             }
-
-        await category.create({
-             categoryName: body.categoryName,
-             categoryDesc: body.categoryDesc,
-             categoryIcon: body.categoryIcon,
-             categoryPosition: body.categoryPosition,
-        })
-        .then((data)=>{
-            if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            await batteryBrand.findOne({
+                where:{
+                brandName: body.brandName,
+                brandLogo: body.brandLogo,
+                brandDesc: body.brandDesc,
+                brandIcon: body.brandIcon,
+                brandPosition: body.brandPosition,
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Added Successfully'))
+        }).then(async (data)=>{
+            if(data){
+                return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
+            }
+            await category.create({
+                categoryName: body.categoryName,
+                categoryDesc: body.categoryDesc,
+                categoryIcon: body.categoryIcon,
+                categoryPosition: body.categoryPosition,
+            })
+            .then((data)=>{
+                if(!data){
+                    return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
+                }
+                return successResponseData(res,data,SUCCESS,res.__('Category Data Added Successfully'))
+            }).catch((err)=>{ 
+                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            })
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,'Something went wrong',FAIL)
-         })
+        })
      },
 
      categoryGetService : async (req,res,next)=>{
         await category.findAll()
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
+            return successResponseData(res,data,SUCCESS,res.__('Category Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -58,11 +72,11 @@ module.exports = {
         await category.findByPk(req.params.id)
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
+            return successResponseData(res,data,SUCCESS,res.__('Category Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -73,11 +87,11 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
-            return successResponseWithoutData(res,res.__('Data Deleted Successfully'),SUCCESS)
+            return successResponseWithoutData(res,res.__('Category Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
@@ -112,11 +126,11 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+                return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
-            return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
+            return successResponseWithoutData(res,res.__('Category Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
 
