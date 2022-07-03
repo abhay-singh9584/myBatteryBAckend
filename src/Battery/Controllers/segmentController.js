@@ -1,87 +1,115 @@
-const {segment}=require('../../models')
+const {segment,batteryBrand}=require('../../models')
 const {successResponseData,validationMessageKey, successResponseWithoutData, errorResponseWithoutData, errorResponseData, validationErrorResponseData}=require('../../Helper/Responce')
-const {isAuthenticRequest}=require('../../Middleware/apiAuth')
 // const battery_brand=db.Battery_Brand;
 // console.log(battery_brand);
 const Joi = require('joi')
 const { SUCCESS, FAIL } = require('../../Helper/Constant')
 
-exports.createSegment=async (req,res,next)=>{
-   body=req.body
-   const reqObj = {
-    segmentName: Joi.string().required(),
-    segmentDesc : Joi.string().optional().allow(''),
-    segmentIcon: Joi.string().optional().allow(''),
-    segmentPosition: Joi.string().required(),
-    segmentBrandName: Joi.string().optional(),
-    };
 
-    const schema = Joi.object(reqObj);
-    const { error } = schema.validate(body);
 
-    if (error) {
-        return validationErrorResponseData(
-            res,
-            (validationMessageKey("Service validation", error))
-        );
-    }
-    await batteryBrand.findOne({
-        where:{
-        brandName: body.brandName,
-        brandLogo: body.brandLogo,
-        brandDesc: body.brandDesc,
-        brandIcon: body.brandIcon,
-        brandPosition: body.brandPosition,
-    }
-    }).then(async (data)=>{
-        if(data){
-            return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
+module.exports ={
+
+    createSegment : async (req,res)=>{
+
+       
+        body=req.body
+        const reqObj = {
+            segmentName: Joi.string().required(),
+            segmentDesc : Joi.string().optional().allow(''),
+            segmentIcon: Joi.string().optional().allow(''),
+            segmentPosition: Joi.string().required(),
+            segmentBrandId: Joi.string().required(),
+        };
+
+        const schema = Joi.object(reqObj);
+        const { error } = schema.validate(body);
+
+        if (error) {
+            return validationErrorResponseData(
+                res,
+                (validationMessageKey("Service validation", error))
+            );
         }
-    await segment.create({
+
+        let batteryDetails = await batteryBrand.findByPk(body.segmentBrandId);
+
+        if(!batteryDetails){
+            return errorResponseWithoutData(
+                res,res.__('No battery brand exists with given Id'),FAIL)
+        }
+
+        let segmentObj = {
             segmentName: body.segmentName,
             segmentDesc: body.segmentDesc,
             segmentIcon: body.segmentIcon,
             segmentPosition: body.segmentPosition,
-            segmentBrandName: body.segmentBrandName,
-        })
-        .then((data)=>{
-        if(!data){
-            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
+            segmentBrandId: body.segmentBrandId,
         }
-        return successResponseData(res,data,SUCCESS,res.__('Data Added Successfully'))
+
+        let segmentDetails =  await segment.findOne({where : {segmentName : body.segmentName , segmentBrandId : body.segmentBrandId }})
+
+        if(segmentDetails){
+            return errorResponseWithoutData(
+                res,res.__('Segment Already Exists'),FAIL)
+        }
+
+        await segment.create(segmentObj)
+            .then((data)=>{
+            if(!data){
+                return successResponseWithoutData(res, res.__('Something Went Wrong'),NO_DATA)
+            }
+            return successResponseData(res,data,SUCCESS,res.__('Segment Added Successfully'))
+            }).catch((err)=>{ 
+
+                console.log( "eerr" , err);
+
+                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            })
+    },
+
+    segmentGetService : async (req,res)=>{
+
+        const {segmentId ,brandId} = req.query;
+
+        let options = {
+            where :{},
+            include:[
+                {
+                    model : batteryBrand,
+                    attributes :["id","brandName"],
+                    where :{}
+                }
+            ],
+            attributes : { exclude :["createdAt","updatedAt"] }
+        }
+
+        
+        if(brandId){
+            options["include"][0]["where"]['id'] =  brandId 
+        }
+
+        let method = segment.findAll(options);
+
+        if(segmentId){
+            options['where']['id'] = segmentId;
+            method = segment.findOne(options)   
+        }
+
+        // console.log(" :: brandId :: ", brandId);
+        // return res.send(options)
+
+        method
+        .then((data)=>{
+            if(!data){
+                return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
+            }
+            return successResponseData(res,data,SUCCESS,res.__('Segment Found Successfully'))
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
         })
-    }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
-    })
-}
+    },
 
-exports.segmentGetService=async (req,res,next)=>{
-    await segment.findAll()
-    .then((data)=>{
-        if(!data){
-            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
-        }
-        return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
-    }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
-     })
-}
-
-exports.segmentFindOneController = async (req, res,next) => {
-    await segment.findByPk(req.params.id)
-    .then((data)=>{
-        if(!data){
-            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
-        }
-        return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
-    }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
-     })
-}
-
-exports.segmentDeleteController = async (req , res ,next) => {
+    segmentDeleteController: async (req , res ) => {
     let segmentExistingData=await segment.findByPk(req.params.id)
     if(!segmentExistingData){
         errorResponseWithoutData(res,'No Segment Data found')
@@ -98,9 +126,9 @@ exports.segmentDeleteController = async (req , res ,next) => {
     }).catch((err)=>{ 
         return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
-}
+    },
 
-exports.segmentUpdateController=async (req,res,next)=>{
+    segmentUpdateController : async (req,res)=>{
     body=req.body
     const reqObj = {
         segmentName: Joi.string().required(),
@@ -138,10 +166,10 @@ exports.segmentUpdateController=async (req,res,next)=>{
     }).catch((err)=>{ 
         return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
-}
+    }
 
-// exports.bulkInsertionsegmentController = (req,res,next) => {
-// 	isAuthenticRequest(req,res,next)
+// bulkInsertionsegmentController = (req,res) => {
+// 	isAuthenticRequest(req,res)
 //     body=req.body
 //     body.JSONData.forEach(data => {
 //         segment.findAll({
@@ -162,3 +190,5 @@ exports.segmentUpdateController=async (req,res,next)=>{
 //         .catch(err => errorResponseWithoutData(res,'Failed to insert data'));
 //     })
 // }
+
+}

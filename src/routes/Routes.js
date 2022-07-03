@@ -305,7 +305,7 @@ router.get("/getSegment",isAuthenticRequest, segmentGetService);
 * @desc finds segments with given id 
 * @access Private
 */
- router.get("/getSegment/:id",isAuthenticRequest, segmentFindOneController);
+//  router.get("/getSegment/:id",isAuthenticRequest, segmentFindOneController);
 
 
 /**

@@ -12,5 +12,10 @@
 	"Duplicate Data Cannot be added": "Duplicate Data Cannot be added",
 	"Battery Brand Data Deleted Successfully": "Battery Brand Data Deleted Successfully",
 	"Duplicate data cannot be added": "Duplicate data cannot be added",
-	"Category Data Found Successfully": "Category Data Found Successfully"
+	"Category Data Found Successfully": "Category Data Found Successfully",
+	"No battery brand exists with given Id": "No battery brand exists with given Id",
+	"Segment Found Successfully": "Segment Found Successfully",
+	"Segment Added Successfully": "Segment Added Successfully",
+	"Segemnt Already Exists": "Segemnt Already Exists",
+	"Segment Already Exists": "Segment Already Exists"
 }

@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      segment.hasOne(models.batteryBrand,{
+        sourceKey :'segmentBrandId',
+        foreignKey :'id'
+      }) 
+
     }
   }
   segment.init({

@@ -6,7 +6,7 @@ const Joi=require('joi')
 
 module.exports = {
 
-    categoryCreateController : async (req,res,next)=>{
+    categoryCreateController : async (req,res)=>{
         
         body=req.body
         const reqObj = {
@@ -28,12 +28,12 @@ module.exports = {
             await batteryBrand.findOne({
                 where:{
                 brandName: body.brandName,
-                brandLogo: body.brandLogo,
-                brandDesc: body.brandDesc,
-                brandIcon: body.brandIcon,
+                // brandLogo: body.brandLogo,
+                // brandDesc: body.brandDesc,
+                // brandIcon: body.brandIcon,
                 brandPosition: body.brandPosition,
             }
-        }).then(async (data)=>{
+        }).then(async(data)=>{
             if(data){
                 return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
             }
@@ -54,9 +54,9 @@ module.exports = {
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,'Something went wrong',FAIL)
         })
-     },
+    },
 
-     categoryGetService : async (req,res,next)=>{
+    categoryGetService : async (req,res)=>{
         await category.findAll()
         .then((data)=>{
             if(!data){
@@ -68,7 +68,7 @@ module.exports = {
          })
     },
 
-     categoryFindOneController : async (req, res,next) => {
+     categoryFindOneController : async (req, res) => {
         await category.findByPk(req.params.id)
         .then((data)=>{
             if(!data){
@@ -80,7 +80,7 @@ module.exports = {
          })
     },
 
-    categoryDeleteController : async (req , res ,next) => {
+    categoryDeleteController : async (req , res ) => {
         await category.destroy({
             where: {
               id: req.params.id
@@ -95,7 +95,7 @@ module.exports = {
          })
     },
 
-    categoryUpdateController : async (req,res,next)=>{
+    categoryUpdateController : async (req,res)=>{
         body=req.body
 
         const reqObj = {
@@ -134,7 +134,7 @@ module.exports = {
          })
     },
 
-//     bulkInsertionCategoryController : async (req,res,next) => {
+//     bulkInsertionCategoryController : async (req,res) => {
 //         body=req.body
 //         body.JSONData.forEach(data => {
 //             category.findAll({
