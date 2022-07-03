@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      oemModel.hasOne(models.batteryBrand,{
+        sourceKey :'OEMBrandId',
+        foreignKey :'id'
+      }) 
+
     }
   }
   oemModel.init({
@@ -18,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     FuelType: DataTypes.STRING,
     OEMModelImage: DataTypes.STRING,
     OEMModelPosition: DataTypes.INTEGER,
-    OEMBrandName: DataTypes.STRING
+    OEMBrandId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'oemModel',

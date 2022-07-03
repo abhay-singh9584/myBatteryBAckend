@@ -27,7 +27,7 @@ module.exports ={
         if (error) {
             return validationErrorResponseData(
                 res,
-                (validationMessageKey("Service validation", error))
+                (validationMessageKey("Service Validation", error))
             );
         }
 
@@ -46,25 +46,35 @@ module.exports ={
             segmentBrandId: body.segmentBrandId,
         }
 
-        let segmentDetails =  await segment.findOne({where : {segmentName : body.segmentName , segmentBrandId : body.segmentBrandId }})
+        let segmentDetails =  await segment.findOne({
+            where : {segmentName : body.segmentName 
+                , segmentBrandId : body.segmentBrandId 
+            }})
+
+        let segmentPositionDetails =  await segment.findOne({
+            where : {
+                segmentPosition:body.segmentPosition
+        }})
 
         if(segmentDetails){
-            return errorResponseWithoutData(
-                res,res.__('Segment Already Exists'),FAIL)
+            return errorResponseWithoutData(res,res.__('Segment Already Exists'),FAIL)
+        }
+        else if(segmentPositionDetails){
+            return errorResponseWithoutData(res,res.__('Segment Position Already Exists'),FAIL)
         }
 
-        await segment.create(segmentObj)
-            .then((data)=>{
-            if(!data){
-                return successResponseWithoutData(res, res.__('Something Went Wrong'),NO_DATA)
-            }
-            return successResponseData(res,data,SUCCESS,res.__('Segment Added Successfully'))
-            }).catch((err)=>{ 
+    await segment.create(segmentObj)
+        .then((data)=>{
+        if(!data){
+            return successResponseWithoutData(res, res.__('Something Went Wrong'),NO_DATA)
+        }
+        return successResponseData(res,data,SUCCESS,res.__('Segment Added Successfully'))
+        }).catch((err)=>{ 
 
-                console.log( "eerr" , err);
+            console.log( "eerr" , err);
 
-                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
-            })
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+        })
     },
 
     segmentGetService : async (req,res)=>{
@@ -144,10 +154,15 @@ module.exports ={
         if (error) {
             return validationErrorResponseData(
                 res,
-                (validationMessageKey("Service validation", error))
+                (validationMessageKey("Service Validation", error))
             );
         }
     
+        const segmentDetails=await segment.findOne({where:{id:req.params.id}})
+        if(!segmentDetails){
+            return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
+        }
+
     await segment.update({ 
         segmentName: body.segmentName,
         segmentDesc: body.segmentDesc,

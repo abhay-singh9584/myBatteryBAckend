@@ -1,7 +1,7 @@
 const { SUCCESS, FAIL, NO_DATA } = require('../../Helper/Constant');
 const { successResponseData, successResponseWithoutData, errorResponseWithoutData, validationMessageKey, validationErrorResponseData } = require('../../Helper/Responce');
-const {groups}=require('../../models/index')
-
+const {group}=require('../../models/index')
+const Joi=require('joi')
 module.exports = {
 
     groupCreateController : async (req,res,next)=>{
@@ -20,22 +20,19 @@ module.exports = {
             if (error) {
                 return validationErrorResponseData(
                     res,
-                    (validationMessageKey("Service validation", error))
+                    (validationMessageKey("Service Validation", error))
                 );
             }
-        await batteryBrand.findOne({
-            where:{
-            brandName: body.brandName,
-            brandLogo: body.brandLogo,
-            brandDesc: body.brandDesc,
-            brandIcon: body.brandIcon,
-            brandPosition: body.brandPosition,
-        }
-        }).then(async (data)=>{
-            if(data){
-                return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
+
+            let groupDetails =  await group.findOne({
+                where : {groupName : body.groupName 
+            }})
+
+            if(groupDetails){
+                return errorResponseWithoutData(res,res.__('Group Already Exists'),FAIL)
             }
-            await groups.create({
+            
+            await group.create({
                 groupName: body.groupName,
                 groupDesc: body.groupDesc,
                 groupIcon: body.groupIcon,
@@ -49,25 +46,25 @@ module.exports = {
             }).catch((err)=>{ 
                 return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
             })
-        }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
-        })
      },
 
      groupGetService : async (req,res,next)=>{
-        await group.findAll()
-        .then((data)=>{
-            if(!data){
-                return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
-            }
-            return successResponseData(res,data,SUCCESS,res.__('Group Data Found Successfully'))
-        }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
-         })
-    },
+        const {groupId} = req.query;
 
-     groupFindOneController : async (req, res,next) => {
-        await group.findByPk(req.params.id)
+        let options = {
+            where :{},
+            
+            attributes : { exclude :["createdAt","updatedAt"] }
+        }
+
+        
+        if(groupId){
+            options["where"]['id'] =  groupId 
+        }
+
+        let method = group.findAll(options);
+
+        method
         .then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
@@ -109,8 +106,13 @@ module.exports = {
             if (error) {
                 return validationErrorResponseData(
                     res,
-                    (validationMessageKey("Service validation", error))
+                    (validationMessageKey("Service Validation", error))
                 );
+            }
+
+            const groupDetails=await group.findOne({where:{id:req.params.id}})
+            if(!groupDetails){
+                return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
             }
 
         await group.update({ 

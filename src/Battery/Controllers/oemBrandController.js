@@ -19,21 +19,18 @@ module.exports = {
             if (error) {
                 return validationErrorResponseData(
                     res,
-                    (validationMessageKey("Service validation", error))
+                    (validationMessageKey("Service Validation", error))
                 );
             }
-        await batteryBrand.findOne({
-            where:{
-            brandName: body.brandName,
-            brandLogo: body.brandLogo,
-            brandDesc: body.brandDesc,
-            brandIcon: body.brandIcon,
-            brandPosition: body.brandPosition,
-        }
-        }).then(async (data)=>{
-            if(data){
-                return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
+        
+            let oemBrandDetails =  await oemBrand.findOne({
+                where : {OEMBrand : body.OEMBrand 
+                }})
+    
+            if(oemBrandDetails){
+                return errorResponseWithoutData(res,res.__('oemBrand Already Exists'),FAIL)
             }
+
             await oemBrand.create({
                 OEMBrand: body.OEMBrand,
                 OEMBrandImage: body.OEMBrandImage,
@@ -47,13 +44,25 @@ module.exports = {
             }).catch((err)=>{ 
                 return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
             })
-        }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
-        })
      },
 
      oemBrandGetService : async (req,res,next)=>{
-        await oemBrand.findAll()
+        const {OEMBrandId} = req.query;
+
+        let options = {
+            where :{},
+            
+            attributes : { exclude :["createdAt","updatedAt"] }
+        }
+
+        
+        if(OEMBrandId){
+            options["where"]['id'] =  OEMBrandId 
+        }
+
+        let method = oemBrand.findAll(options);
+
+        method
         .then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
@@ -64,17 +73,7 @@ module.exports = {
          })
     },
 
-     oemBrandFindOneController : async (req, res,next) => {
-        await oemBrand.findByPk(req.params.id)
-        .then((data)=>{
-            if(!data){
-                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
-            }
-            return successResponseData(res,data,SUCCESS,res.__('OEM Brand Data Found Successfully'))
-        }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
-         })
-    },
+     
 
     oemBrandDeleteController : async (req , res ,next) => {
         await oemBrand.destroy({
@@ -106,8 +105,13 @@ module.exports = {
             if (error) {
                 return validationErrorResponseData(
                     res,
-                    (validationMessageKey("Service validation", error))
+                    (validationMessageKey("Service Validation", error))
                 );
+            }
+
+            const oemBrandDetails=await oemBrand.findOne({where:{id:req.params.id}})
+            if(!oemBrandDetails){
+                return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
             }
 
         await oemBrand.update({ 

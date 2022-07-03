@@ -22,21 +22,26 @@ module.exports = {
             if (error) {
                 return validationErrorResponseData(
                     res,
-                    (validationMessageKey("Service validation", error))
+                    (validationMessageKey("Service Validation", error))
                 );
             }
-            await batteryBrand.findOne({
-                where:{
-                brandName: body.brandName,
-                // brandLogo: body.brandLogo,
-                // brandDesc: body.brandDesc,
-                // brandIcon: body.brandIcon,
-                brandPosition: body.brandPosition,
+            
+            let categoryDetails =  await category.findOne({
+                where : {categoryName : body.categoryName  
+                }})
+    
+            let categoryPositionDetails =  await category.findOne({
+                where : {
+                    categoryPosition:body.categoryPosition
+            }})
+    
+            if(categoryDetails){
+                return errorResponseWithoutData(res,res.__('Category Already Exists'),FAIL)
             }
-        }).then(async(data)=>{
-            if(data){
-                return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
+            else if(categoryPositionDetails){
+                return errorResponseWithoutData(res,res.__('Category Position Already Exists'),FAIL)
             }
+
             await category.create({
                 categoryName: body.categoryName,
                 categoryDesc: body.categoryDesc,
@@ -51,25 +56,25 @@ module.exports = {
             }).catch((err)=>{ 
                 return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
             })
-        }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
-        })
+       
     },
 
     categoryGetService : async (req,res)=>{
-        await category.findAll()
-        .then((data)=>{
-            if(!data){
-                return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
-            }
-            return successResponseData(res,data,SUCCESS,res.__('Category Data Found Successfully'))
-        }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
-         })
-    },
+        const {categoryId} = req.query;
 
-     categoryFindOneController : async (req, res) => {
-        await category.findByPk(req.params.id)
+        let options = {
+            where :{},
+            attributes : { exclude :["createdAt","updatedAt"] }
+        }
+
+        
+        if(categoryId){
+            options["where"]['id'] =  categoryId 
+        }
+
+        let method = category.findAll(options);
+
+        method
         .then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
@@ -111,8 +116,13 @@ module.exports = {
             if (error) {
                 return validationErrorResponseData(
                     res,
-                    (validationMessageKey("Service validation", error))
+                    (validationMessageKey("Service Validation", error))
                 );
+            }
+
+            const categoryDetails=await category.findOne({where:{id:req.params.id}})
+            if(!categoryDetails){
+                return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
             }
 
         await category.update({ 
@@ -139,7 +149,7 @@ module.exports = {
 //         body.JSONData.forEach(data => {
 //             category.findAll({
 //                 where: {
-//                   brandName:data.brandName
+//                   categoryName:data.categoryName
 //                 }
 //               }).then(duplicateData => {
 //                 if(!(duplicateData.length > 0)){

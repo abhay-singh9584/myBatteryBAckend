@@ -49,7 +49,7 @@ router.get('/', (req, res) => {
   * @desc finds all battery brands with given id
   * @access Private
   */
-  router.get("/getBatteryBrand/:id",isAuthenticRequest, batteryBrandFindOneController);
+  // router.get("/getBatteryBrand/:id",isAuthenticRequest, batteryBrandFindOneController);
  
  /**
   * @route DELETE /batteryBrand/delete/:id
@@ -97,7 +97,7 @@ router.get('/', (req, res) => {
   * @desc finds all categories with given id
   * @access Private
   */
-  router.get("/getCategory/:id",isAuthenticRequest,categoryFindOneController);
+  // router.get("/getCategory/:id",isAuthenticRequest,categoryFindOneController);
  
  
  /**
@@ -116,15 +116,14 @@ router.get('/', (req, res) => {
  router.put("/category/update/:id",isAuthenticRequest, categoryUpdateController);
  
 
- //group-----------------
+//  group-----------------
   
-//  const{
-//   groupCreateController,
-//   groupGetController,
-//   groupDeleteController,
-//   groupUpdateController,
-//   groupFindOneController,r
-// } = require("../Battery/Controllers/groupController");
+ const{
+  groupCreateController,
+  groupGetService,
+  groupDeleteController,
+  groupUpdateController,
+} = require("../Battery/Controllers/groupController");
 
 
 /**
@@ -132,7 +131,7 @@ router.get('/', (req, res) => {
 * @desc Creates BatteyModel
 * @access Private
 */
-// router.post("/createGroup",isAuthenticRequest, groupCreateController);
+router.post("/createGroup",isAuthenticRequest, groupCreateController);
 
 
 /**
@@ -140,7 +139,7 @@ router.get('/', (req, res) => {
 * @desc finds all BatteyModel
 * @access Private
 */
-// router.get("/getGroup",isAuthenticRequest,groupGetController);
+router.get("/getGroup",isAuthenticRequest,groupGetService);
 
 
 /**
@@ -156,7 +155,7 @@ router.get('/', (req, res) => {
 * @desc Deletes the given id
 * @access Private
 */
-// router.delete("/group/delete/:id",isAuthenticRequest, groupDeleteController);
+router.delete("/group/delete/:id",isAuthenticRequest, groupDeleteController);
 
 
 /**
@@ -164,7 +163,7 @@ router.get('/', (req, res) => {
 * @desc Updates the given id
 * @access Private
 */
-// router.put("/group/update/:id",isAuthenticRequest,groupUpdateController);
+router.put("/group/update/:id",isAuthenticRequest,groupUpdateController);
 
 // subcategory ----
 
@@ -203,7 +202,7 @@ router.get("/getSubCategory",isAuthenticRequest, subCategoryGetService);
  * @desc finds subCategories with given id
  * @access Private
  */
- router.get("/getSubCategory/:id",isAuthenticRequest, subCategoryFindOneController);
+//  router.get("/getSubCategory/:id",isAuthenticRequest, subCategoryFindOneController);
 
 
 /**
@@ -257,7 +256,7 @@ const {oemBrandCreateController,
   * @desc finds all oemBrand with given id
   * @access Private
   */
-   router.get("/getOemBrand/:id",isAuthenticRequest, oemBrandFindOneController);
+  //  router.get("/getOemBrand/:id",isAuthenticRequest, oemBrandFindOneController);
  
 
  /**
@@ -322,6 +321,61 @@ router.delete("/segment/delete/:id",isAuthenticRequest, segmentDeleteController)
 * @access Private
 */
 router.put("/segment/update/:id",isAuthenticRequest, segmentUpdateController);
+
+// OEM Model-----
+const {
+	oemModelCreateController,
+	oemModelGetService,
+	oemModelDeleteController,
+  oemModelUpdateController,
+    // oemModelFindOneController,
+    // oemModelBulkInsertController
+} = require("../Battery/Controllers/oemModelController");
+
+/**
+ * @route POST /createOemModel
+ * @desc Creates Oem Model
+ * @access Private
+ */
+router.post("/createOemModel", oemModelCreateController);
+
+
+/**
+ * @route POST /bulkInsertOemModel
+ * @desc Creates Oem Model in bulk
+ * @access Private
+ */
+//  router.post("/bulkInsertOemModel", oemModelBulkInsertController);
+
+
+/**
+ * @route GET /getOemModel
+ * @desc finds all getOemModel
+ * @access Private
+ */
+router.get("/getOemModel", oemModelGetService);
+
+/**
+ * @route GET /getOemModel/:id
+ * @desc finds all getOemModel with given id
+ * @access Private
+ */
+//  router.get("/getOemModel/:id", oemModelFindOneController);
+
+
+/**
+ * @route DELETE /oemModel/delete/:id
+ * @desc Deletes the given id
+ * @access Private
+ */
+router.delete("/oemModel/delete/:id", oemModelDeleteController);
+
+/**
+ * @route PUT /oemModel/update/:id
+ * @desc Updates the given id
+ * @access Private
+ */
+ router.put("/oemModel/update/:id", oemModelUpdateController);
 
 
 module.exports= router;

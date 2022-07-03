@@ -20,21 +20,26 @@ module.exports = {
             if (error) {
                 return validationErrorResponseData(
                     res,
-                    (validationMessageKey("Service validation", error))
+                    (validationMessageKey("Service Validation", error))
                 );
             }
-        await batteryBrand.findOne({
-            where:{
-            brandName: body.brandName,
-            brandLogo: body.brandLogo,
-            brandDesc: body.brandDesc,
-            brandIcon: body.brandIcon,
-            brandPosition: body.brandPosition,
-        }
-        }).then(async (data)=>{
-            if(data){
-                return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
+            
+            let subCategoryDetails =  await subcategory.findOne({
+                where : {subcategoryName : body.subcategoryName 
+                }})
+                
+            let subCategoryPositionDetails =  await subcategory.findOne({
+                where : {
+                    subcategoryPosition:body.subcategoryPosition
+            }})
+        
+            if(subCategoryDetails){
+                return errorResponseWithoutData(res,res.__('SubCategory Already Exists'),FAIL)
             }
+            else if(subCategoryPositionDetails){
+                return errorResponseWithoutData(res,res.__('SubCategory Position Already Exists'),FAIL)
+            }
+                
             await subcategory.create({
                 subcategoryName: body.subcategoryName,
                 subcategoryDesc: body.subcategoryDesc,
@@ -49,9 +54,6 @@ module.exports = {
             }).catch((err)=>{ 
                 return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
             })
-        }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something went wrong',FAIL)
-        })
      },
 
      subCategoryGetService : async (req,res,next)=>{
@@ -109,10 +111,16 @@ module.exports = {
             if (error) {
                 return validationErrorResponseData(
                     res,
-                    (validationMessageKey("Service validation", error))
+                    (validationMessageKey("Service Validation", error))
                 );
             }
 
+
+        const subcategoryDetails=await subcategory.findOne({where:{id:req.params.id}})
+        if(!subcategoryDetails){
+            return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
+        }
+        
         await subcategory.update({ 
             subcategoryName: body.subcategoryName,
             subcategoryDesc: body.subcategoryDesc,

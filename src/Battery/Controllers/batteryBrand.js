@@ -22,72 +22,76 @@ exports.createBatteryBrand=async (req,res,next)=>{
     if (error) {
         return validationErrorResponseData(
             res,
-            (validationMessageKey("Service validation", error))
+            (validationMessageKey("Service Validation", error))
         );
     }
-    await batteryBrand.findOne({
-            where:{
-            brandName: body.brandName,
-            brandLogo: body.brandLogo,
-            brandDesc: body.brandDesc,
-            brandIcon: body.brandIcon,
-            brandPosition: body.brandPosition,
-        }
-    }).then(async (data)=>{
-        if(data){
-            return errorResponseWithoutData(res, res.__('Duplicate data cannot be added'),CONFLICT)
-        }
-        
-        await batteryBrand.create({
-            brandName: body.brandName,
-            brandLogo: body.brandLogo,
-            brandDesc: body.brandDesc,
-            brandIcon: body.brandIcon,
-            brandPosition: body.brandPosition,
-        })
-        .then((battery_data)=>{
-            if(!battery_data){
-                return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
-            }
-            return successResponseData(res,battery_data,SUCCESS,res.__('Battery Brand Data Found Successfully'))
-            }).catch((err)=>{ 
-                return errorResponseWithoutData(res,'Something went wrong',FAIL)
-            })
 
-    }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
+    let batteryBrandDetails =  await batteryBrand.findOne({
+        where : {brandName : body.brandName 
+        }})
+        
+    let batteryBrandPositionDetails =  await batteryBrand.findOne({
+        where : {
+            brandPosition:body.brandPosition
+    }})
+
+    if(batteryBrandPositionDetails){
+        return errorResponseWithoutData(res,res.__('BatteryBrand Position Already Exists'),FAIL)
+    }
+    if(batteryBrandDetails){
+        return errorResponseWithoutData(res,res.__('BatteryBrand Already Exists'),FAIL)
+    }
+        
+    await batteryBrand.create({
+        brandName: body.brandName,
+        brandLogo: body.brandLogo,
+        brandDesc: body.brandDesc,
+        brandIcon: body.brandIcon,
+        brandPosition: body.brandPosition,
     })
+    .then((battery_data)=>{
+        if(!battery_data){
+            return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+        }
+        return successResponseData(res,battery_data,SUCCESS,res.__('Battery Brand Data Found Successfully'))
+    }).catch((err)=>{ 
+        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+    })
+
 }
 
 exports.batteryBrandGetService=async (req,res,next)=>{
-    await batteryBrand.findAll()
+    const {brandId} = req.query;
+
+        let options = {
+            where :{},
+            attributes : { exclude :["createdAt","updatedAt"] }
+        }
+
+        
+        if(brandId){
+            options["where"]['id'] =  brandId 
+        }
+
+        let method = batteryBrand.findAll(options);
+
+    method
     .then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
         }
         // console.log(data);
         return successResponseData(res,data,SUCCESS,res.__('Battery Brand Data Found Successfully'))
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
+        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
 }
 
-exports.batteryBrandFindOneController = async (req, res,next) => {
-    await batteryBrand.findByPk(req.params.id)
-    .then((data)=>{
-        if(!data){
-            return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
-        }
-        return successResponseData(res,data,SUCCESS,res.__('Data Found Successfully'))
-    }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
-     })
-}
 
 exports.batteryBrandDeleteController = async (req , res ,next) => {
     let batteryBrandExistingData=await batteryBrand.findByPk(req.params.id)
     if(!batteryBrandExistingData){
-        errorResponseWithoutData(res,'No data found')
+        errorResponseWithoutData(res,'No Data Found')
     }
     await batteryBrand.destroy({
         where: {
@@ -95,11 +99,11 @@ exports.batteryBrandDeleteController = async (req , res ,next) => {
         }
       }).then((data)=>{
         if(!data){
-            return errorResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            return errorResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
         }
         return successResponseWithoutData(res,res.__('Battery Brand Data Deleted Successfully'),SUCCESS)
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
+        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
 }
 
@@ -119,10 +123,15 @@ exports.batteryBrandUpdateController=async (req,res,next)=>{
         if (error) {
             return validationErrorResponseData(
                 res,
-                (validationMessageKey("Service validation", error))
+                (validationMessageKey("Service Validation", error))
             );
         }
     
+        const batteryBrandDetails=await batteryBrand.findOne({where:{id:req.params.id}})
+        if(!batteryBrandDetails){
+            return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
+        }
+
     await batteryBrand.update({ 
         brandName: body.brandName,
         brandLogo: body.brandLogo,
@@ -135,11 +144,11 @@ exports.batteryBrandUpdateController=async (req,res,next)=>{
         }
       }).then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('No data Found'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
         }
         return successResponseWithoutData(res,res.__('Battery Brand Data Updated Successfully'),SUCCESS)
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something went wrong',FAIL)
+        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
      })
 }
 

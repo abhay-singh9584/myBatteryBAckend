@@ -20,7 +20,7 @@ module.exports = {
       OEMModelPosition: {
         type: Sequelize.INTEGER
       },
-      OEMBrandName: {
+      OEMBrandId: {
         type: Sequelize.STRING
       },
       createdAt: {
