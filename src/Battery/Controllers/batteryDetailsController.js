@@ -8,7 +8,7 @@ module.exports={
 
     createBatteryDetails : async (req,res)=>{
 
-        body=req.body
+        const body=req.body
         const reqObj = {
             brandId: Joi.number().required(),
             modelId: Joi.number().required(),
@@ -41,7 +41,40 @@ module.exports={
             subCategoryId: body.subCategoryId,
         }
 
+        let brandDetails = await batteryBrand.findByPk(body.brandId);
+        let modelDetails = await modelDimension.findByPk(body.modelId);
+        let groupDetails = await group.findByPk(body.groupId);
+        let oemModelDetails = await oemModel.findByPk(body.oemModelId);
+        let schemeDetails = await scheme.findByPk(body.schemeId);
+        let secondaryNameDetails = await secondaryName.findByPk(body.secondaryNameId);
+        let segmentDetails = await segment.findByPk(body.segmentId);
+        let subCategoryDetails = await subcategory.findByPk(body.subCategoryId);
 
+
+        if(!brandDetails){
+            return errorResponseWithoutData(res,res.__('No Brand Exists With Given Id'),FAIL)
+        }
+        else if(!modelDetails){
+            return errorResponseWithoutData(res,res.__('No Model Exists With Given Id'),FAIL)
+        }
+        else if(!groupDetails){
+            return errorResponseWithoutData(res,res.__('No Group Exists With Given Id'),FAIL)
+        }
+        else if(!oemModelDetails){
+            return errorResponseWithoutData(res,res.__('No OEMModel Exists With Given Id'),FAIL)
+        }
+        else if(!schemeDetails){
+            return errorResponseWithoutData(res,res.__('No Scheme Exists With Given Id'),FAIL)
+        }
+        else if(!secondaryNameDetails){
+            return errorResponseWithoutData(res,res.__('No Secondary Name Exists With Given Id'),FAIL)
+        }
+        else if(!segmentDetails){
+            return errorResponseWithoutData(res,res.__('No Segment Exists With Given Id'),FAIL)
+        }
+        else if(!subCategoryDetails){
+            return errorResponseWithoutData(res,res.__('No Sub Category Exists With Given Id'),FAIL)
+        }
 
         let Details =  await batteryDetail.findOne({
             where : detailsObj
