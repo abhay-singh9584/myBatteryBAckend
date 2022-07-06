@@ -61,14 +61,14 @@ module.exports ={
     await segment.create(segmentObj)
         .then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('Something Went Wrong'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
         }
         return successResponseData(res,data,SUCCESS,res.__('Segment Added Successfully'))
         }).catch((err)=>{ 
 
             console.log( "eerr" , err);
 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -105,7 +105,7 @@ module.exports ={
             }
             return successResponseData(res,data,SUCCESS,res.__('Segment Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -114,9 +114,9 @@ module.exports ={
         let segmentExistingData=await segment.findByPk(req.params.id)
 
         if(!segmentExistingData){
-            errorResponseWithoutData(res,'No Segment Data Found',FAIL)
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
-        
+
         await segment.destroy({
             where: {
             id: req.params.id
@@ -127,7 +127,7 @@ module.exports ={
             }
             return successResponseWithoutData(res,res.__('Data Deleated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -173,7 +173,7 @@ module.exports ={
         }
         return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+        return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
      })
     }
 

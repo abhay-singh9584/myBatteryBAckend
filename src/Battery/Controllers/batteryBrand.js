@@ -57,7 +57,7 @@ module.exports={
             }
             return successResponseData(res,battery_data,SUCCESS,res.__('Brand Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -82,7 +82,7 @@ module.exports={
             }
             return successResponseData(res,data,SUCCESS,res.__('Brand Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -92,7 +92,7 @@ module.exports={
         let batteryBrandExistingData=await batteryBrand.findByPk(req.params.id)
 
         if(!batteryBrandExistingData){
-            errorResponseWithoutData(res,res.__('No Brand Data Found'),NO_DATA)
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
 
         await batteryBrand.destroy({
@@ -105,7 +105,7 @@ module.exports={
             }
             return successResponseWithoutData(res,res.__('Brand Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -151,7 +151,7 @@ module.exports={
                 }
                 return successResponseWithoutData(res,res.__('Brand Data Updated Successfully'),SUCCESS)
             }).catch((err)=>{ 
-                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+                return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
             })
     }
 }

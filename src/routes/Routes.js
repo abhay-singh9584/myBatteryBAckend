@@ -503,7 +503,7 @@ router.put("/modelDimension/update/:id",modelDimensionUpdateController);
 
 //batteryDetails
 
-const{ batteryDetailsGetService, createBatteryDetails } = require("../Battery/Controllers/batteryDetailsController");
+const{ batteryDetailsGetService, createBatteryDetails, batteryDetailsUpdateController, batteryDetailsDeleteController } = require("../Battery/Controllers/batteryDetailsController");
 
 /**
 * @route POST /createSecondaryName
@@ -518,6 +518,21 @@ router.post("/createbatteryDetails", createBatteryDetails);
 * @access Private
 */
 router.get("/getbatteryDetails", batteryDetailsGetService);
+
+/**
+* @route DELETE /batteryDetail/delete/:id
+* @desc Deletes the given id
+* @access Private
+*/
+router.delete("/batteryDetail/delete/:id", batteryDetailsDeleteController);
+
+
+/**
+* @route PUT /batteryDetail/update/:id
+* @desc Updates the given id
+* @access Private
+*/
+router.put("/batteryDetail/update/:id",batteryDetailsUpdateController);
 
 
 

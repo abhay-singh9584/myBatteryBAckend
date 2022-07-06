@@ -54,7 +54,7 @@ module.exports = {
                 }
                 return successResponseData(res,data,SUCCESS,res.__('Category Data Added Successfully'))
             }).catch((err)=>{ 
-                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+                return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
             })
     },
 
@@ -78,7 +78,7 @@ module.exports = {
             }
             return successResponseData(res,data,SUCCESS,res.__('Category Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 
@@ -87,7 +87,7 @@ module.exports = {
         let categoryExistingData=await category.findByPk(req.params.id)
 
         if(!categoryExistingData){
-            errorResponseWithoutData(res,'No Category Data Found',FAIL)
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
 
         await category.destroy({
@@ -100,7 +100,7 @@ module.exports = {
             }
             return successResponseWithoutData(res,res.__('Category Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 
@@ -144,7 +144,7 @@ module.exports = {
             }
             return successResponseWithoutData(res,res.__('Category Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 }

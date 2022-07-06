@@ -49,14 +49,14 @@ module.exports ={
     await secondaryName.create(secondaryNameObj)
         .then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('Something Went Wrong'),NO_DATA)
+            return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
         }
         return successResponseData(res,data,SUCCESS,res.__('secondaryName Added Successfully'))
         }).catch((err)=>{ 
 
             console.log( "eerr" , err);
 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -92,7 +92,7 @@ module.exports ={
             }
             return successResponseData(res,data,SUCCESS,res.__('secondaryName Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -101,7 +101,7 @@ module.exports ={
         let secondaryNameExistingData=await secondaryName.findByPk(req.params.id)
 
         if(!secondaryNameExistingData){
-            errorResponseWithoutData(res,'No secondaryName Data Found',FAIL)
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
 
         await secondaryName.destroy({
@@ -114,7 +114,7 @@ module.exports ={
             }
             return successResponseWithoutData(res,res.__('Data Deleated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -154,7 +154,7 @@ module.exports ={
         }
         return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
     }).catch((err)=>{ 
-        return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+        return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
      })
     }
 }

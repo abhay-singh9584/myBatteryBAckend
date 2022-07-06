@@ -44,7 +44,7 @@ module.exports = {
             }
             return successResponseData(res,data,SUCCESS,res.__('Group Data Added Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(resres.__,'Something Went Wrong',FAIL)
         })
      },
 
@@ -69,7 +69,7 @@ module.exports = {
             }
             return successResponseData(res,data,SUCCESS,res.__('Group Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 
@@ -78,7 +78,7 @@ module.exports = {
         let groupExistingData=await group.findByPk(req.params.id)
 
         if(!groupExistingData){
-            errorResponseWithoutData(res,'No Group Data Found',FAIL)
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
 
         await group.destroy({
@@ -91,7 +91,7 @@ module.exports = {
             }
             return successResponseWithoutData(res,res.__('Group Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(resres.__,'Something Went Wrong',FAIL)
          })
     },
 
@@ -135,7 +135,7 @@ module.exports = {
             }
             return successResponseWithoutData(res,res.__('Group Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(resres.__,'Something Went Wrong',FAIL)
          })
     },
 }

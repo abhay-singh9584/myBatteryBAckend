@@ -43,94 +43,121 @@ module.exports={
 
 
 
-        // let Details =  await batteryDetails.findOne({
-        //     where : detailsObj
-        // })    
+        let Details =  await batteryDetail.findOne({
+            where : detailsObj
+        })    
 
-        // if(Details){
-        //     return errorResponseWithoutData(res,res.__('BatteryDetails Already Exists'),FAIL)
-        // }
+        if(Details){
+            return errorResponseWithoutData(res,res.__('Battery Details Already Exists'),FAIL)
+        }
             
         await batteryDetail.create(detailsObj)
         .then((battery_data)=>{
             if(!battery_data){
                 return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
             }
-            return successResponseData(res,battery_data,SUCCESS,res.__('Details Data Found Successfully'))
+            return successResponseData(res,battery_data,SUCCESS,res.__('Battery Details Data Found Successfully'))
         }).catch((err)=>{ 
             console.log(err);
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
     batteryDetailsGetService : async (req,res)=>{
 
-        const {DetailsId} = req.query;
+        const {detailsId,brandId,modelId,groupId,oemModelId,schemeId,secondaryNameId,segmentId,subCategoryId} = req.query;
 
-            let options = {
-                where :{},
-                include:[
-                    {
-                        model : batteryBrand,
-                        attributes :["id",'brandName'],
-                        where :{}
-                    },{
-                        model : modelDimension,
-                        attributes :["id",'modelName'],
-                        where :{}
-                    },{
-                        model : group,
-                        attributes :["id",'groupName'],
-                        where :{}
-                    },{
-                        model : oemModel,
-                        attributes :["id"],
-                        where :{}
-                    },{
-                        model : scheme,
-                        attributes :["id"],
-                        where :{}
-                    },{
-                        model : secondaryName,
-                        attributes :["id",'secondaryName'],
-                        where :{}
-                    },{
-                        model : segment,
-                        attributes :["id",'segmentName'],
-                        where :{}
-                    },{
-                        model : subcategory,
-                        attributes :["id"],
-                        where :{}
-                    },
-                ],
-                attributes : { exclude :["createdAt","updatedAt"] }
-            }
-            
-            if(DetailsId){
-                options["where"]['id'] =  DetailsId 
-            }
-
-            let method = batteryDetail.findAll(options);
+        let options = {
+            where :{},
+            include:[
+                {
+                    model : batteryBrand,
+                    attributes :["id",'brandName'],
+                    where :{}
+                },{
+                    model : modelDimension,
+                    attributes :["id",'modelName'],
+                    where :{}
+                },{
+                    model : group,
+                    attributes :["id",'groupName'],
+                    where :{}
+                },{
+                    model : oemModel,
+                    attributes :["id"],
+                    where :{}
+                },{
+                    model : scheme,
+                    attributes :["id"],
+                    where :{}
+                },{
+                    model : secondaryName,
+                    attributes :["id",'secondaryName'],
+                    where :{}
+                },{
+                    model : segment,
+                    attributes :["id",'segmentName'],
+                    where :{}
+                },{
+                    model : subcategory,
+                    attributes :["id"],
+                    where :{}
+                },
+            ],
+            attributes : { exclude :["createdAt","updatedAt"] }
+        }
+        
+        if(brandId){
+            options["include"][0]["where"]['id'] =  brandId 
+        }
+        else if(modelId){
+            options["include"][0]["where"]['id'] =  modelId 
+        }
+        else if(groupId){
+            options["include"][0]["where"]['id'] =  groupId 
+        }   
+        else if(oemModelId){
+            options["include"][0]["where"]['id'] =  oemModelId 
+        }
+        else if(schemeId){
+            options["include"][0]["where"]['id'] =  schemeId 
+        }
+        else if(secondaryNameId){
+            options["include"][0]["where"]['id'] =  secondaryNameId 
+        }
+        else if(segmentId){
+            options["include"][0]["where"]['id'] =  segmentId 
+        }
+        else if(subCategoryId){
+            options["include"][0]["where"]['id'] =  subCategoryId 
+        }
+        
+        
+        let method = batteryDetail.findAll(options);
+        
+        if(detailsId){
+            options["where"]['id'] =  detailsId 
+        }
+        
 
         method.then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
             }
-            return successResponseData(res,data,SUCCESS,res.__('Details Data Found Successfully'))
+            return successResponseData(res,data,SUCCESS,res.__('Battery Details Data Found Successfully'))
         }).catch((err)=>{ 
             console.log(err);
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
 
     batteryDetailsDeleteController : async (req , res ) => {
 
-        let batteryDetailsExistingData=await batteryDetails.findByPk(req.params.id)
+        let batteryDetailsExistingData=await batteryDetail.findByPk(req.params.id)
 
         if(!batteryDetailsExistingData){
-            errorResponseWithoutData(res,res.__('No Details Data Found'),NO_DATA)
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
 
         await batteryDetail.destroy({
@@ -143,7 +170,7 @@ module.exports={
             }
             return successResponseWithoutData(res,res.__('Details Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -176,7 +203,7 @@ module.exports={
                 return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
             }
 
-            await batteryDetails.update({ 
+            await batteryDetail.update({ 
                 brandId: body.brandId,
                 modelId: body.modelId,
                 groupId : body.groupId,
@@ -195,7 +222,7 @@ module.exports={
                 }
                 return successResponseWithoutData(res,res.__('Details Data Updated Successfully'),SUCCESS)
             }).catch((err)=>{ 
-                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+                return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
             })
     }
 }

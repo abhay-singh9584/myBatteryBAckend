@@ -53,11 +53,11 @@ module.exports ={
     await scheme.create(schemeObj)
         .then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('Something Went Wrong'),NO_DATA)
+            return successResponseWithoutData(res, res.__(res.__('Something Went Wrong')),NO_DATA)
         }
         return successResponseData(res,data,SUCCESS,res.__('scheme Added Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -93,7 +93,7 @@ module.exports ={
             }
             return successResponseData(res,data,SUCCESS,res.__('scheme Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -102,7 +102,7 @@ module.exports ={
         let schemeExistingData=await scheme.findByPk(req.params.id)
 
         if(!schemeExistingData){
-            errorResponseWithoutData(res,'No scheme Data found')
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
 
         await scheme.destroy({
@@ -115,7 +115,7 @@ module.exports ={
             }
             return successResponseWithoutData(res,res.__('Data Deleated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -161,7 +161,7 @@ module.exports ={
             }
             return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
         }
 }

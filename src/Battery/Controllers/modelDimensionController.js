@@ -83,7 +83,7 @@ module.exports = {
             }
             return successResponseData(res,data,SUCCESS,res.__('Model Data Added Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
 
@@ -107,7 +107,7 @@ module.exports = {
             }
             return successResponseData(res,data,SUCCESS,res.__('Model Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 
@@ -116,7 +116,7 @@ module.exports = {
         let modelDimensionExistingData=await modelDimension.findByPk(req.params.id)
 
         if(!modelDimensionExistingData){
-            errorResponseWithoutData(res,'No Model Data Found',FAIL)
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
 
         await modelDimension.destroy({
@@ -129,7 +129,7 @@ module.exports = {
             }
             return successResponseWithoutData(res,res.__('model Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 
@@ -200,7 +200,7 @@ module.exports = {
             }
             return successResponseWithoutData(res,res.__('Model Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 }

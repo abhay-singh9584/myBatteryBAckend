@@ -58,7 +58,7 @@ module.exports = {
             }
             return successResponseData(res,data,SUCCESS,res.__('OEM Model Data Added Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
      },
 
@@ -94,7 +94,7 @@ module.exports = {
             }
             return successResponseData(res,data,SUCCESS,res.__('OEM Model Data Found Successfully'))
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 
@@ -105,7 +105,7 @@ module.exports = {
         let oemModelExistingData=await oemModel.findByPk(req.params.id)
 
         if(!oemModelExistingData){
-            errorResponseWithoutData(res,'No OEMModel Data Found',FAIL)
+            errorResponseWithoutData(res,res.__('No Such Id Found'),NO_DATA)
         }
 
         await oemModel.destroy({
@@ -118,7 +118,7 @@ module.exports = {
             }
             return successResponseWithoutData(res,res.__('OEM Model Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 
@@ -165,7 +165,7 @@ module.exports = {
             }
             return successResponseWithoutData(res,res.__('OEM Model Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 
-            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
     },
 }
