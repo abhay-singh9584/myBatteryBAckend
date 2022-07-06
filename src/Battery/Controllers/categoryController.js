@@ -56,26 +56,23 @@ module.exports = {
             }).catch((err)=>{ 
                 return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
             })
-       
     },
 
     categoryGetService : async (req,res)=>{
-        const {categoryId} = req.query;
 
+        const {categoryId} = req.query;
         let options = {
             where :{},
             attributes : { exclude :["createdAt","updatedAt"] }
         }
-
-        
+  
         if(categoryId){
             options["where"]['id'] =  categoryId 
         }
 
         let method = category.findAll(options);
 
-        method
-        .then((data)=>{
+        method.then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
@@ -86,6 +83,13 @@ module.exports = {
     },
 
     categoryDeleteController : async (req , res ) => {
+
+        let categoryExistingData=await category.findByPk(req.params.id)
+
+        if(!categoryExistingData){
+            errorResponseWithoutData(res,'No Category Data Found',FAIL)
+        }
+
         await category.destroy({
             where: {
               id: req.params.id
@@ -101,8 +105,8 @@ module.exports = {
     },
 
     categoryUpdateController : async (req,res)=>{
-        body=req.body
 
+        body=req.body
         const reqObj = {
             categoryName: Joi.string().required(),
             categoryDesc : Joi.string().optional().allow(''),
@@ -110,20 +114,20 @@ module.exports = {
             categoryPosition: Joi.number().required(),
             };
         
-            const schema = Joi.object(reqObj);
-            const { error } = schema.validate(body);
-        
-            if (error) {
-                return validationErrorResponseData(
-                    res,
-                    (validationMessageKey("Service Validation", error))
-                );
-            }
+        const schema = Joi.object(reqObj);
+        const { error } = schema.validate(body);
+    
+        if (error) {
+            return validationErrorResponseData(
+                res,
+                (validationMessageKey("Service Validation", error))
+            );
+        }
 
-            const categoryDetails=await category.findOne({where:{id:req.params.id}})
-            if(!categoryDetails){
-                return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
-            }
+        const categoryDetails=await category.findOne({where:{id:req.params.id}})
+        if(!categoryDetails){
+            return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
+        }
 
         await category.update({ 
             categoryName: body.categoryName,
@@ -143,27 +147,4 @@ module.exports = {
             return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
          })
     },
-
-//     bulkInsertionCategoryController : async (req,res) => {
-//         body=req.body
-//         body.JSONData.forEach(data => {
-//             category.findAll({
-//                 where: {
-//                   categoryName:data.categoryName
-//                 }
-//               }).then(duplicateData => {
-//                 if(!(duplicateData.length > 0)){
-//                     category.create(data)
-//                         .then((data) => successResponseData(res,data,200,'Successfull Bulk Inserstion'))
-//                         .catch((err) =>  errorResponseWithoutData(res,'Bul insertion failed'))
-//                 } 
-//                 else{					
-//                     errorResponseWithoutData(res,'Unique data inserted,failed for duplicate data')					
-//                 }
-
-//             }) 
-//             .catch(err => errorResponseWithoutData(res,'Failed to insert data'));
-//         })
-//     }
-
 }

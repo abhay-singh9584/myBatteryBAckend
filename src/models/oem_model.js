@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      oemModel.hasOne(models.batteryBrand,{
+      oemModel.hasOne(models.oemBrand,{
         sourceKey :'OEMBrandId',
         foreignKey :'id'
       }) 

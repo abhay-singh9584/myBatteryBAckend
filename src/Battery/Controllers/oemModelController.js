@@ -1,6 +1,6 @@
 const {oemModel}=require('../../models/index')
 const Joi=require('joi');
-const {batteryBrand}=require('../../models/index')
+const {oemBrand}=require('../../models/index')
 
 const { validationErrorResponseData, validationMessageKey, successResponseWithoutData, successResponseData, errorResponseWithoutData } = require('../../Helper/Responce');
 const { NO_DATA, SUCCESS, FAIL } = require('../../Helper/Constant');
@@ -18,32 +18,32 @@ module.exports = {
             OEMBrandId:Joi.number().required()
             };
         
-            const schema = Joi.object(reqObj);
-            const { error } = schema.validate(body);
-        
-            if (error) {
-                return validationErrorResponseData(
-                    res,
-                    (validationMessageKey("Service Validation", error))
-                );
-            }
-        
-            let oemModelDetails =  await oemModel.findOne({
-                where : {OEMModelName : body.OEMModelName 
-                    , OEMBrandId : body.OEMBrandId 
-                }}).catch((err)=>console.log('ioeiroweior',err))
+        const schema = Joi.object(reqObj);
+        const { error } = schema.validate(body);
     
-            let oemModelPositionDetails =  await oemModel.findOne({
-                where : {
-                    OEMModelPosition:body.OEMModelPosition
+        if (error) {
+            return validationErrorResponseData(
+                res,
+                (validationMessageKey("Service Validation", error))
+            );
+        }
+    
+        let oemModelDetails =  await oemModel.findOne({
+            where : {OEMModelName : body.OEMModelName 
+                , OEMBrandId : body.OEMBrandId 
             }})
-    
-            if(oemModelDetails){
-                return errorResponseWithoutData(res,res.__('oemModel Already Exists'),FAIL)
-            }
-            if(oemModelPositionDetails){
-                return errorResponseWithoutData(res,res.__('oemModel Position Already Exists'),FAIL)
-            }
+
+        let oemModelPositionDetails =  await oemModel.findOne({
+            where : {
+                OEMModelPosition:body.OEMModelPosition
+        }})
+
+        if(oemModelDetails){
+            return errorResponseWithoutData(res,res.__('OEMModel Already Exists'),FAIL)
+        }
+        else if(oemModelPositionDetails){
+            return errorResponseWithoutData(res,res.__('OEMModel Position Already Exists'),FAIL)
+        }
         
         await oemModel.create({
             OEMModelName: body.OEMModelName,
@@ -60,25 +60,23 @@ module.exports = {
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
         })
-        
      },
 
      oemModelGetService : async (req,res,next)=>{
-        const {oemModelId ,brandId} = req.query;
 
+        const {oemModelId ,brandId} = req.query;
         let options = {
             where :{},
             include:[
                 {
-                    model : batteryBrand,
-                    attributes :["id","brandName"],
+                    model : oemBrand,
+                    attributes :["id","OEMBrand"],
                     where :{}
                 }
             ],
             attributes : { exclude :["createdAt","updatedAt"] }
         }
 
-        
         if(brandId){
             options["include"][0]["where"]['id'] =  brandId 
         }
@@ -90,11 +88,7 @@ module.exports = {
             method = oemModel.findOne(options)   
         }
 
-        // console.log(" :: brandId :: ", brandId);
-        // return res.send(options)
-
-        method
-        .then((data)=>{
+        method.then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
             }
@@ -107,6 +101,13 @@ module.exports = {
      
 
     oemModelDeleteController : async (req , res ,next) => {
+
+        let oemModelExistingData=await oemModel.findByPk(req.params.id)
+
+        if(!oemModelExistingData){
+            errorResponseWithoutData(res,'No OEMModel Data Found',FAIL)
+        }
+
         await oemModel.destroy({
             where: {
               id: req.params.id
@@ -122,8 +123,8 @@ module.exports = {
     },
 
     oemModelUpdateController : async (req,res,next)=>{
-        body=req.body
 
+        body=req.body
         const reqObj = {
             OEMModelName: Joi.string().required(),
             FuelType: Joi.string().required(),
@@ -133,15 +134,15 @@ module.exports = {
             OEMBrandId:Joi.number().required()
             };
         
-            const schema = Joi.object(reqObj);
-            const { error } = schema.validate(body);
-        
-            if (error) {
-                return validationErrorResponseData(
-                    res,
-                    (validationMessageKey("Service Validation", error))
-                );
-            }
+        const schema = Joi.object(reqObj);
+        const { error } = schema.validate(body);
+    
+        if (error) {
+            return validationErrorResponseData(
+                res,
+                (validationMessageKey("Service Validation", error))
+            );
+        }
         
         const oemModelDetails=await oemModel.findOne({where:{id:req.params.id}})
         if(!oemModelDetails){

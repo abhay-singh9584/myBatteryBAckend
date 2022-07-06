@@ -1,26 +1,35 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('subcategories', {
+    await queryInterface.createTable('batteryDetails', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      subcategoryName: {
-        type: Sequelize.STRING
-      },
-      subcategoryDesc: {
-        type: Sequelize.STRING
-      },
-      subcategoryIcon: {
-        type: Sequelize.STRING
-      },
-      subcategoryPosition: {
+      brandId: {
         type: Sequelize.INTEGER
       },
-      categoryId:{
+      modelId: {
+        type: Sequelize.INTEGER
+      },
+      groupId: {
+        type: Sequelize.INTEGER
+      },
+      oemModelId: {
+        type: Sequelize.INTEGER
+      },
+      schemeId: {
+        type: Sequelize.INTEGER
+      },
+      secondaryNameId: {
+        type: Sequelize.INTEGER
+      },
+      segmentId: {
+        type: Sequelize.INTEGER
+      },
+      subCategoryId: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -34,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('subcategories');
+    await queryInterface.dropTable('batteryDetails');
   }
 };

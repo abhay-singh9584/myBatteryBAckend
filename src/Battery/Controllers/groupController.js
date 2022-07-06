@@ -14,58 +14,56 @@ module.exports = {
             groupBasedOn: Joi.string().required(),
             };
         
-            const schema = Joi.object(reqObj);
-            const { error } = schema.validate(body);
+        const schema = Joi.object(reqObj);
+        const { error } = schema.validate(body);
+    
+        if (error) {
+            return validationErrorResponseData(
+                res,
+                (validationMessageKey("Service Validation", error))
+            );
+        }
+
+        let groupDetails =  await group.findOne({
+            where : {groupName : body.groupName 
+        }})
+
+        if(groupDetails){
+            return errorResponseWithoutData(res,res.__('Group Already Exists'),FAIL)
+        }
         
-            if (error) {
-                return validationErrorResponseData(
-                    res,
-                    (validationMessageKey("Service Validation", error))
-                );
+        await group.create({
+            groupName: body.groupName,
+            groupDesc: body.groupDesc,
+            groupIcon: body.groupIcon,
+            groupBasedOn: body.groupBasedOn,
+        })
+        .then((data)=>{
+            if(!data){
+                return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
-
-            let groupDetails =  await group.findOne({
-                where : {groupName : body.groupName 
-            }})
-
-            if(groupDetails){
-                return errorResponseWithoutData(res,res.__('Group Already Exists'),FAIL)
-            }
-            
-            await group.create({
-                groupName: body.groupName,
-                groupDesc: body.groupDesc,
-                groupIcon: body.groupIcon,
-                groupBasedOn: body.groupBasedOn,
-            })
-            .then((data)=>{
-                if(!data){
-                    return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
-                }
-                return successResponseData(res,data,SUCCESS,res.__('Group Data Added Successfully'))
-            }).catch((err)=>{ 
-                return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
-            })
+            return successResponseData(res,data,SUCCESS,res.__('Group Data Added Successfully'))
+        }).catch((err)=>{ 
+            return errorResponseWithoutData(res,'Something Went Wrong',FAIL)
+        })
      },
 
      groupGetService : async (req,res,next)=>{
-        const {groupId} = req.query;
 
+        const {groupId} = req.query;
         let options = {
             where :{},
             
             attributes : { exclude :["createdAt","updatedAt"] }
         }
 
-        
         if(groupId){
             options["where"]['id'] =  groupId 
         }
 
         let method = group.findAll(options);
 
-        method
-        .then((data)=>{
+        method.then((data)=>{
             if(!data){
                 return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
@@ -76,6 +74,13 @@ module.exports = {
     },
 
     groupDeleteController : async (req , res ,next) => {
+
+        let groupExistingData=await group.findByPk(req.params.id)
+
+        if(!groupExistingData){
+            errorResponseWithoutData(res,'No Group Data Found',FAIL)
+        }
+
         await group.destroy({
             where: {
               id: req.params.id
@@ -91,8 +96,8 @@ module.exports = {
     },
 
     groupUpdateController : async (req,res,next)=>{
-        body=req.body
 
+        body=req.body
         const reqObj = {
             groupName: Joi.string().required(),
             groupDesc : Joi.string().optional().allow(''),
@@ -100,20 +105,20 @@ module.exports = {
             groupBasedOn: Joi.string().required(),
             };
         
-            const schema = Joi.object(reqObj);
-            const { error } = schema.validate(body);
-        
-            if (error) {
-                return validationErrorResponseData(
-                    res,
-                    (validationMessageKey("Service Validation", error))
-                );
-            }
+        const schema = Joi.object(reqObj);
+        const { error } = schema.validate(body);
+    
+        if (error) {
+            return validationErrorResponseData(
+                res,
+                (validationMessageKey("Service Validation", error))
+            );
+        }
 
-            const groupDetails=await group.findOne({where:{id:req.params.id}})
-            if(!groupDetails){
-                return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
-            }
+        const groupDetails=await group.findOne({where:{id:req.params.id}})
+        if(!groupDetails){
+            return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
+        }
 
         await group.update({ 
             groupName: body.groupName,

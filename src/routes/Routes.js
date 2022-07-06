@@ -378,4 +378,147 @@ router.delete("/oemModel/delete/:id", oemModelDeleteController);
  router.put("/oemModel/update/:id", oemModelUpdateController);
 
 
+// scheme --------
+const {
+	schemeGetService,
+	schemeDeleteController,
+    schemeUpdateController,
+    schemeFindOneController,
+    schemeBulkInsertController,
+    createScheme
+} = require("../Battery/Controllers/schemeController");
+
+/**
+ * @route POST /createScheme
+ * @desc Creates Scheme
+ * @access Private
+ */
+router.post("/createScheme", createScheme);
+
+/**
+ * @route POST /bulkInsertionScheme 
+ * @desc Creates Scheme in bulk
+ * @access Private
+ */
+//  router.post("/bulkInsertionScheme", schemeBulkInsertController);
+
+
+/**
+ * @route GET /getScheme
+ * @desc finds all Scheme
+ * @access Private
+ */
+router.get("/getScheme", schemeGetService);
+
+/**
+ * @route GET /getScheme/:id
+ * @desc finds Scheme with given id
+ * @access Private
+ */
+//  router.get("/getScheme/:id", schemeFindOneController);
+
+
+/**
+ * @route DELETE /scheme/delete/:id
+ * @desc Deletes the given id
+ * @access Private
+ */
+router.delete("/scheme/delete/:id", schemeDeleteController);
+
+/**
+ * @route PUT /scheme/update/:id
+ * @desc Updates the given id
+ * @access Private
+ */
+ router.put("/scheme/update/:id", schemeUpdateController);
+
+//SecondaryName-----------------
+const{
+  createSecondaryName,
+  secondaryNameGetService,
+  secondaryNameDeleteController,
+  secondaryNameUpdateController,
+} = require("../Battery/Controllers/secondaryNameController");
+
+/**
+* @route POST /createSecondaryName
+* @desc Creates SecondaryName
+* @access Private
+*/
+router.post("/createSecondaryName", createSecondaryName);
+
+/**
+* @route GET /getSecondaryName
+* @desc finds all SecondaryName
+* @access Private
+*/
+router.get("/getSecondaryName", secondaryNameGetService);
+
+/**
+* @route DELETE /secondaryName/delete/:id
+* @desc Deletes the given id
+* @access Private
+*/
+router.delete("/secondaryName/delete/:id", secondaryNameDeleteController);
+
+
+/**
+* @route PUT /secondaryName/update/:id
+* @desc Updates the given id
+* @access Private
+*/
+router.put("/secondaryName/update/:id",secondaryNameUpdateController);
+
+//SecondaryName-----------------
+const{ modelDimensionGetService, modelDimensionDeleteController, modelDimensionUpdateController, modelDimensionCreateController } = require("../Battery/Controllers/modelDimensionController");
+
+/**
+* @route POST /createSecondaryName
+* @desc Creates SecondaryName
+* @access Private
+*/
+router.post("/createmodelDimension", modelDimensionCreateController);
+
+/**
+* @route GET /getmodelDimension
+* @desc finds all modelDimension
+* @access Private
+*/
+router.get("/getmodelDimension", modelDimensionGetService);
+
+/**
+* @route DELETE /modelDimension/delete/:id
+* @desc Deletes the given id
+* @access Private
+*/
+router.delete("/modelDimension/delete/:id", modelDimensionDeleteController);
+
+
+/**
+* @route PUT /modelDimension/update/:id
+* @desc Updates the given id
+* @access Private
+*/
+router.put("/modelDimension/update/:id",modelDimensionUpdateController);
+
+//batteryDetails
+
+const{ batteryDetailsGetService, createBatteryDetails } = require("../Battery/Controllers/batteryDetailsController");
+
+/**
+* @route POST /createSecondaryName
+* @desc Creates SecondaryName
+* @access Private
+*/
+router.post("/createbatteryDetails", createBatteryDetails);
+
+/**
+* @route GET /getbatteryDetails
+* @desc finds all batteryDetails
+* @access Private
+*/
+router.get("/getbatteryDetails", batteryDetailsGetService);
+
+
+
 module.exports= router;

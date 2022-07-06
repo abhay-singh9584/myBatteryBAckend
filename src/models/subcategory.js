@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+// const { category }=require('./index')
 module.exports = (sequelize, DataTypes) => {
   class subcategory extends Model {
     /**
@@ -11,13 +12,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      subcategory.hasOne(models.category,{
+        sourceKey :'categoryId',
+        foreignKey :'id'
+      }) 
     }
   }
   subcategory.init({
     subcategoryName: DataTypes.STRING,
     subcategoryDesc: DataTypes.STRING,
     subcategoryIcon: DataTypes.STRING,
-    subcategoryPosition: DataTypes.INTEGER
+    subcategoryPosition: DataTypes.INTEGER,
+    categoryId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'subcategory',
