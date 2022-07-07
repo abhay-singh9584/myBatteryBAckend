@@ -63,13 +63,15 @@ module.exports={
 
     batteryBrandGetService : async (req,res)=>{
 
-        const {brandId} = req.query;
+        const {brandId,sortBy} = req.query;
 
             let options = {
                 where :{},
-                attributes : { exclude :["createdAt","updatedAt"] }
+                attributes : { exclude :["createdAt","updatedAt"] },
             }
-            
+            if(sortBy){
+                options.order=[['id','DESC']]
+            }
             if(brandId){
                 options["where"]['id'] =  brandId 
             }

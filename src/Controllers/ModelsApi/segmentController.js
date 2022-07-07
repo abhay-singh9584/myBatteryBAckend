@@ -74,7 +74,7 @@ module.exports ={
 
     segmentGetService : async (req,res)=>{
 
-        const {segmentId ,brandId} = req.query;
+        const {segmentId ,brandId,sortBy} = req.query;
 
         let options = {
             where :{},
@@ -91,6 +91,11 @@ module.exports ={
         if(brandId){
             options["include"][0]["where"]['id'] =  brandId 
         }
+        
+
+        if(sortBy){
+            options.order=[['id','DESC']]
+        }
 
         let method = segment.findAll(options);
 
@@ -98,6 +103,9 @@ module.exports ={
             options['where']['id'] = segmentId;
             method = segment.findOne(options)   
         }
+        // if(sortBy || segmentId){
+        //     options.order=[['id','DESC']]
+        // }
 
         method.then((data)=>{
             if(!data){
