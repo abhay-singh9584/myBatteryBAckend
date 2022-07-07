@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 const connect = require('connect')
 
-const {createBatteryBrand,batteryBrandGetService, batteryBrandFindOneController, batteryBrandDeleteController, batteryBrandUpdateController, bulkInsertionBatteryBrandController}=require('../Battery/Controllers/batteryBrand');
-const { categoryCreateController, categoryFindOneController, categoryDeleteController, categoryUpdateController, categoryGetService, bulkInsertionCategoryController } = require('../Battery/Controllers/categoryController');
+const {createBatteryBrand,batteryBrandGetService, batteryBrandFindOneController, batteryBrandDeleteController, batteryBrandUpdateController, bulkInsertionBatteryBrandController}=require('../Controllers/ModelsApi/batteryBrand');
+const { categoryCreateController, categoryFindOneController, categoryDeleteController, categoryUpdateController, categoryGetService, bulkInsertionCategoryController } = require('../Controllers/ModelsApi/categoryController');
 
 const {isAuthenticRequest} = require("../Middleware/apiAuth")
 
@@ -123,7 +123,7 @@ router.get('/', (req, res) => {
   groupGetService,
   groupDeleteController,
   groupUpdateController,
-} = require("../Battery/Controllers/groupController");
+} = require("../Controllers/ModelsApi/groupController");
 
 
 /**
@@ -173,7 +173,7 @@ const {
 	subCategoryDeleteController,
     subCategoryUpdateController,
     subCategoryFindOneController,
-} = require("../Battery/Controllers/subCategoryController");
+} = require("../Controllers/ModelsApi/subCategoryController");
 
 /**
  * @route POST /createSubCategory
@@ -226,7 +226,7 @@ router.put("/subCategory/update/:id",isAuthenticRequest, subCategoryUpdateContro
 const {oemBrandCreateController,
 	oemBrandDeleteController,
     oemBrandUpdateController,
-    oemBrandFindOneController, oemBrandGetService } = require('../Battery/Controllers/oemBrandController');
+    oemBrandFindOneController, oemBrandGetService } = require('../Controllers/ModelsApi/oemBrandController');
 
 
 /**
@@ -274,7 +274,7 @@ const {oemBrandCreateController,
  router.put("/oemBrand/update/:id",isAuthenticRequest, oemBrandUpdateController);
 
 //  segment ----
-const {segmentDeleteController,createSegment,segmentGetService,segmentFindOneController,segmentUpdateController}=require('../Battery/Controllers/segmentController')
+const {segmentDeleteController,createSegment,segmentGetService,segmentFindOneController,segmentUpdateController}=require('../Controllers/ModelsApi/segmentController')
 
 /**
 * @route POST /createSegment
@@ -330,7 +330,7 @@ const {
   oemModelUpdateController,
     // oemModelFindOneController,
     // oemModelBulkInsertController
-} = require("../Battery/Controllers/oemModelController");
+} = require("../Controllers/ModelsApi/oemModelController");
 
 /**
  * @route POST /createOemModel
@@ -386,7 +386,7 @@ const {
     schemeFindOneController,
     schemeBulkInsertController,
     createScheme
-} = require("../Battery/Controllers/schemeController");
+} = require("../Controllers/ModelsApi/schemeController");
 
 /**
  * @route POST /createScheme
@@ -438,7 +438,7 @@ const{
   secondaryNameGetService,
   secondaryNameDeleteController,
   secondaryNameUpdateController,
-} = require("../Battery/Controllers/secondaryNameController");
+} = require("../Controllers/ModelsApi/secondaryNameController");
 
 /**
 * @route POST /createSecondaryName
@@ -470,7 +470,7 @@ router.delete("/secondaryName/delete/:id", secondaryNameDeleteController);
 router.put("/secondaryName/update/:id",secondaryNameUpdateController);
 
 //SecondaryName-----------------
-const{ modelDimensionGetService, modelDimensionDeleteController, modelDimensionUpdateController, modelDimensionCreateController } = require("../Battery/Controllers/modelDimensionController");
+const{ modelDimensionGetService, modelDimensionDeleteController, modelDimensionUpdateController, modelDimensionCreateController } = require("../Controllers/ModelsApi/modelDimensionController");
 
 /**
 * @route POST /createSecondaryName
@@ -503,7 +503,7 @@ router.put("/modelDimension/update/:id",modelDimensionUpdateController);
 
 //batteryDetails
 
-const{ batteryDetailsGetService, createBatteryDetails, batteryDetailsUpdateController, batteryDetailsDeleteController } = require("../Battery/Controllers/batteryDetailsController");
+const{ batteryDetailsGetService, createBatteryDetails, batteryDetailsUpdateController, batteryDetailsDeleteController } = require("../Controllers/ModelsApi/batteryDetailsController");
 
 /**
 * @route POST /createSecondaryName

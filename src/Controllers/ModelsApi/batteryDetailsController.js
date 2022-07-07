@@ -50,7 +50,6 @@ module.exports={
         let segmentDetails = await segment.findByPk(body.segmentId);
         let subCategoryDetails = await subcategory.findByPk(body.subCategoryId);
 
-
         if(!brandDetails){
             return errorResponseWithoutData(res,res.__('No Brand Exists With Given Id'),FAIL)
         }
