@@ -337,7 +337,7 @@ const {
  * @desc Creates Oem Model
  * @access Private
  */
-router.post("/createOemModel", oemModelCreateController);
+router.post("/createOemModel",isAuthenticRequest, oemModelCreateController);
 
 
 /**
@@ -345,7 +345,7 @@ router.post("/createOemModel", oemModelCreateController);
  * @desc Creates Oem Model in bulk
  * @access Private
  */
-//  router.post("/bulkInsertOemModel", oemModelBulkInsertController);
+//  router.post("/bulkInsertOemModel",isAuthenticRequest, oemModelBulkInsertController);
 
 
 /**
@@ -353,14 +353,14 @@ router.post("/createOemModel", oemModelCreateController);
  * @desc finds all getOemModel
  * @access Private
  */
-router.get("/getOemModel", oemModelGetService);
+router.get("/getOemModel",isAuthenticRequest, oemModelGetService);
 
 /**
  * @route GET /getOemModel/:id
  * @desc finds all getOemModel with given id
  * @access Private
  */
-//  router.get("/getOemModel/:id", oemModelFindOneController);
+//  router.get("/getOemModel/:id",isAuthenticRequest, oemModelFindOneController);
 
 
 /**
@@ -368,14 +368,14 @@ router.get("/getOemModel", oemModelGetService);
  * @desc Deletes the given id
  * @access Private
  */
-router.delete("/oemModel/delete/:id", oemModelDeleteController);
+router.delete("/oemModel/delete/:id",isAuthenticRequest, oemModelDeleteController);
 
 /**
  * @route PUT /oemModel/update/:id
  * @desc Updates the given id
  * @access Private
  */
- router.put("/oemModel/update/:id", oemModelUpdateController);
+ router.put("/oemModel/update/:id",isAuthenticRequest, oemModelUpdateController);
 
 
 // scheme --------
@@ -393,14 +393,14 @@ const {
  * @desc Creates Scheme
  * @access Private
  */
-router.post("/createScheme", createScheme);
+router.post("/createScheme",isAuthenticRequest, createScheme);
 
 /**
  * @route POST /bulkInsertionScheme 
  * @desc Creates Scheme in bulk
  * @access Private
  */
-//  router.post("/bulkInsertionScheme", schemeBulkInsertController);
+//  router.post("/bulkInsertionScheme",isAuthenticRequest, schemeBulkInsertController);
 
 
 /**
@@ -408,14 +408,14 @@ router.post("/createScheme", createScheme);
  * @desc finds all Scheme
  * @access Private
  */
-router.get("/getScheme", schemeGetService);
+router.get("/getScheme",isAuthenticRequest, schemeGetService);
 
 /**
  * @route GET /getScheme/:id
  * @desc finds Scheme with given id
  * @access Private
  */
-//  router.get("/getScheme/:id", schemeFindOneController);
+//  router.get("/getScheme/:id",isAuthenticRequest, schemeFindOneController);
 
 
 /**
@@ -423,14 +423,14 @@ router.get("/getScheme", schemeGetService);
  * @desc Deletes the given id
  * @access Private
  */
-router.delete("/scheme/delete/:id", schemeDeleteController);
+router.delete("/scheme/delete/:id",isAuthenticRequest, schemeDeleteController);
 
 /**
  * @route PUT /scheme/update/:id
  * @desc Updates the given id
  * @access Private
  */
- router.put("/scheme/update/:id", schemeUpdateController);
+ router.put("/scheme/update/:id",isAuthenticRequest, schemeUpdateController);
 
 //SecondaryName-----------------
 const{
@@ -445,21 +445,21 @@ const{
 * @desc Creates SecondaryName
 * @access Private
 */
-router.post("/createSecondaryName", createSecondaryName);
+router.post("/createSecondaryName",isAuthenticRequest, createSecondaryName);
 
 /**
 * @route GET /getSecondaryName
 * @desc finds all SecondaryName
 * @access Private
 */
-router.get("/getSecondaryName", secondaryNameGetService);
+router.get("/getSecondaryName",isAuthenticRequest, secondaryNameGetService);
 
 /**
 * @route DELETE /secondaryName/delete/:id
 * @desc Deletes the given id
 * @access Private
 */
-router.delete("/secondaryName/delete/:id", secondaryNameDeleteController);
+router.delete("/secondaryName/delete/:id",isAuthenticRequest, secondaryNameDeleteController);
 
 
 /**
@@ -467,7 +467,7 @@ router.delete("/secondaryName/delete/:id", secondaryNameDeleteController);
 * @desc Updates the given id
 * @access Private
 */
-router.put("/secondaryName/update/:id",secondaryNameUpdateController);
+router.put("/secondaryName/update/:id",isAuthenticRequest,secondaryNameUpdateController);
 
 //SecondaryName-----------------
 const{ modelDimensionGetService, modelDimensionDeleteController, modelDimensionUpdateController, modelDimensionCreateController } = require("../Controllers/ModelsApi/modelDimensionController");
@@ -477,21 +477,21 @@ const{ modelDimensionGetService, modelDimensionDeleteController, modelDimensionU
 * @desc Creates SecondaryName
 * @access Private
 */
-router.post("/createmodelDimension", modelDimensionCreateController);
+router.post("/createmodelDimension",isAuthenticRequest, modelDimensionCreateController);
 
 /**
 * @route GET /getmodelDimension
 * @desc finds all modelDimension
 * @access Private
 */
-router.get("/getmodelDimension", modelDimensionGetService);
+router.get("/getmodelDimension",isAuthenticRequest, modelDimensionGetService);
 
 /**
 * @route DELETE /modelDimension/delete/:id
 * @desc Deletes the given id
 * @access Private
 */
-router.delete("/modelDimension/delete/:id", modelDimensionDeleteController);
+router.delete("/modelDimension/delete/:id",isAuthenticRequest, modelDimensionDeleteController);
 
 
 /**
@@ -499,7 +499,7 @@ router.delete("/modelDimension/delete/:id", modelDimensionDeleteController);
 * @desc Updates the given id
 * @access Private
 */
-router.put("/modelDimension/update/:id",modelDimensionUpdateController);
+router.put("/modelDimension/update/:id",isAuthenticRequest,modelDimensionUpdateController);
 
 //batteryDetails
 
@@ -510,21 +510,21 @@ const{ batteryDetailsGetService, createBatteryDetails, batteryDetailsUpdateContr
 * @desc Creates SecondaryName
 * @access Private
 */
-router.post("/createbatteryDetails", createBatteryDetails);
+router.post("/createbatteryDetails",isAuthenticRequest, createBatteryDetails);
 
 /**
 * @route GET /getbatteryDetails
 * @desc finds all batteryDetails
 * @access Private
 */
-router.get("/getbatteryDetails", batteryDetailsGetService);
+router.get("/getbatteryDetails",isAuthenticRequest, batteryDetailsGetService);
 
 /**
 * @route DELETE /batteryDetail/delete/:id
 * @desc Deletes the given id
 * @access Private
 */
-router.delete("/batteryDetail/delete/:id", batteryDetailsDeleteController);
+router.delete("/batteryDetail/delete/:id",isAuthenticRequest, batteryDetailsDeleteController);
 
 
 /**
@@ -532,7 +532,7 @@ router.delete("/batteryDetail/delete/:id", batteryDetailsDeleteController);
 * @desc Updates the given id
 * @access Private
 */
-router.put("/batteryDetail/update/:id",batteryDetailsUpdateController);
+router.put("/batteryDetail/update/:id",isAuthenticRequest,batteryDetailsUpdateController);
 
 
 

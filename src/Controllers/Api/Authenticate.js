@@ -1,9 +1,9 @@
 const { User} = require("../../models");
-// const Helper = require("../../services/Helper");
+const Helper = require("../../Helper/Responce");
 const Response = require("../../Helper/Responce");
 const bcrypt = require("bcrypt");
 const { ACTIVE, SUCCESS, DELETE, UNAUTHORIZED } = require("../../Helper/Constant");
-const jwToken = require("../../services/jwtToken");
+const jwToken = require("../../services/jwtToken.js");
 const { Op } = require("sequelize");
 const Joi = require("joi");
 const moment = require("moment");
@@ -15,7 +15,7 @@ module.exports = {
 		const reqObj = {
 			name: Joi.string().trim().max(50).required(),
 			email: Joi.string().email().required(),
-			password: Joi.string().required(),
+			contact: Joi.string().regex(/^[0-9]{10}$/).required(),
 		};
 		const schema = Joi.object(reqObj);
 		const { error } = await schema.validate(reqParam);
@@ -29,9 +29,9 @@ module.exports = {
 				const userEmailExist = await User.findOne({
 					where: {
 						email: reqParam.email,
-						status: {
-							[Op.not]: DELETE,
-						},
+						// status: {
+						// 	[Op.not]: DELETE,
+						// },
 					},
 				}).then(userEmailData => userEmailData);
 
@@ -44,31 +44,31 @@ module.exports = {
 					);
 				}
 
-				const DeletduserEmailExist = await User.findOne({
-					where: {
-						email: reqParam.email,
-						status: {
-							[Op.eq]: DELETE,
-						},
-					},
-				}).then(userEmailData => userEmailData);
+				// const DeletduserEmailExist = await User.findOne({
+				// 	where: {
+				// 		email: reqParam.email,
+				// 		status: {
+				// 			[Op.eq]: DELETE,
+				// 		},
+				// 	},
+				// }).then(userEmailData => userEmailData);
 
-				if (DeletduserEmailExist) {
-					return Response.errorResponseWithoutData(
-						res,
-						res.locals.__(
-							"Email address is already registered with us, with deleted status"
-						)
-					);
-				}
+				// if (DeletduserEmailExist) {
+				// 	return Response.errorResponseWithoutData(
+				// 		res,
+				// 		res.locals.__(
+				// 			"Email address is already registered with us, with deleted status"
+				// 		)
+				// 	);
+				// }
 			}
 
-			const passwordHash = bcrypt.hashSync(reqParam.password, 10);
+			// const passwordHash = bcrypt.hashSync(reqParam.password, 10);
 			let userObj = {
 				name: reqParam.name,
 				email: reqParam.email,
-				password: passwordHash,
-				status: ACTIVE,
+				contact: reqParam.contact,
+				// status: ACTIVE,
 			};
 
 			await User.create(userObj)
@@ -107,8 +107,8 @@ module.exports = {
 	login: async (req, res) => {
 		const reqParam = req.body;
 		const reqObj = {
-			email: Joi.string().email().required(),
-			password: Joi.string().required(),
+			contact: Joi.string().email().required(),
+			// password: Joi.string().required(),
 		};
 		const schema = Joi.object(reqObj);
 		const { error } = await schema.validate(reqParam);
@@ -121,72 +121,72 @@ module.exports = {
 		} else {
 			let user = await User.findOne({
 				where: {
-					email: reqParam.email,
-					status: {
-						[Op.eq]: ACTIVE ,
-					},
+					contact: reqParam.contact,
+					// status: {
+                    //     [Op.eq]: ACTIVE ,
+                    // },
 				},
 			}).then(customerData => customerData);
 
 			if (!user) {
 				return Response.errorResponseWithoutData(
 					res,
-					res.locals.__("Email doesn't Exist")
+					res.locals.__("Contact doesn't Exist")
 				);
 			}
 
-			bcrypt.compare(
-				reqParam.password,
-				user.password,
-				async (err, result) => {
-					if (err) {
-						return Response.errorResponseWithoutData(
-							res,
-							res.locals.__("Wrong password entered")
-						);
-					}
+			// bcrypt.compare(
+			// 	reqParam.password,
+			// 	user.password,
+			// 	async (err, result) => {
+			// 		if (err) {
+			// 			return Response.errorResponseWithoutData(
+			// 				res,
+			// 				res.locals.__("Wrong password entered")
+			// 			);
+			// 		}
 
-					const token = jwToken.issueUser({
-						id: user.id,
-						email: user.email,
-					});
+			// 		const token = jwToken.issueUser({
+			// 			id: user.id,
+			// 			email: user.email,
+			// 		});
 
-					user.reset_token = token;
-					user.save().then(
-						async updateData => {
-							if (updateData) {
-								updateData = {
-									id: updateData.id,
-									name: updateData.name,
-									email: updateData.email,
-									status: updateData.status,
-									reset_token: updateData.reset_token,
-								};
+			// 		user.reset_token = token;
+			// 		user.save().then(
+			// 			async updateData => {
+			// 				if (updateData) {
+			// 					updateData = {
+			// 						id: updateData.id,
+			// 						name: updateData.name,
+			// 						email: updateData.email,
+			// 						status: updateData.status,
+			// 						reset_token: updateData.reset_token,
+			// 					};
 
-								console.log();
-								return Response.successResponseData(
-									res,
-									updateData,
-									res.locals.__("Logged in successfully")
-								);
-							} else {
-								return Response.errorResponseData(
-									res,
-									res.__("Something went wrong")
-								);
-							}
-						},
-						e => {
-							console.log(e);
-							Response.errorResponseData(
-								res,
-								res.__("Internal error")
-							);
-						}
-					);
-					return null;
-				}
-			);
+			// 					console.log();
+			// 					return Response.successResponseData(
+			// 						res,
+			// 						updateData,
+			// 						res.locals.__("Logged in successfully")
+			// 					);
+			// 				} else {
+			// 					return Response.errorResponseData(
+			// 						res,
+			// 						res.__("Something went wrong")
+			// 					);
+			// 				}
+			// 			},
+			// 			e => {
+			// 				console.log(e);
+			// 				Response.errorResponseData(
+			// 					res,
+			// 					res.__("Internal error")
+			// 				);
+			// 			}
+			// 		);
+			// 		return null;
+			// 	}
+			// );
 		}
 	},
 
