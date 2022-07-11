@@ -14,7 +14,7 @@ const i18n = require('./src/i18n/i18n')
 
 // route Name import and declaration goes here
 const batteryRouter = require('./src/routes/Routes');
-const userRouter=require('./src/routes/Api')
+const AppRouter=require('./src/routes/AppRoutes')
 // const invetoryRouter = require("./src/Inventory/routes/index.js")
 //check
 
@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes to be declared here
 app.use('/battery', batteryRouter);
-app.use('/user',userRouter)
+app.use('/app',AppRouter)
 // app.use('/inventory', invetoryRouter);
 
 // catch 404 and forward to error handler
