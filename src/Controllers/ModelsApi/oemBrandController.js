@@ -9,7 +9,7 @@ module.exports = {
         
         body=req.body
         const reqObj = {
-            OEMBrand: Joi.string().required(),
+            OEMBrand: Joi.string().required().allow(''),
             OEMBrandImage : Joi.string().optional().allow(''),
             OEMB: Joi.string().optional().allow(''),
             };
@@ -24,13 +24,13 @@ module.exports = {
             );
         }
     
-        let oemBrandDetails =  await oemBrand.findOne({
-            where : {OEMBrand : body.OEMBrand 
-            }})
+        // let oemBrandDetails =  await oemBrand.findOne({
+        //     where : {OEMBrand : body.OEMBrand 
+        //     }})
 
-        if(oemBrandDetails){
-            return errorResponseWithoutData(res,res.__('oemBrand Already Exists'),FAIL)
-        }
+        // if(oemBrandDetails){
+        //     return errorResponseWithoutData(res,res.__('oemBrand Already Exists'),FAIL)
+        // }
 
         await oemBrand.create({
             OEMBrand: body.OEMBrand,

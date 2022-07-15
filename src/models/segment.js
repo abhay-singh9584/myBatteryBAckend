@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      segment.hasOne(models.batteryBrand,{
+      segment.hasOne(models.oemBrand,{
         sourceKey :'segmentBrandId',
         foreignKey :'id'
       }) 
