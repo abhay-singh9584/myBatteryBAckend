@@ -18,7 +18,7 @@ router.get('/get-all-products',isAuthenticRequest,getAllProducts)
 router.get('/get-battery-brand/:name',isAuthenticRequest,getBatteryBrandByName)
 
 //Get-Product-Brands
-router.get('/get-product-brands/:name',isAuthenticRequest,getProductBrand)
+router.get('/get-product-brands',isAuthenticRequest,getProductBrand)
 
 //Get-Brand-Models
 router.get('/get-brand-models/:name',isAuthenticRequest,getBrandModels)

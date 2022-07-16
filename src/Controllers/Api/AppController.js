@@ -71,27 +71,23 @@ module.exports={
     getProductBrand : async (req,res)=>{
 
         // console.log(req.params.name)
-        const {byAlpha} = req.query
+        const {sortBy} = req.query
+
+        let sorting = [['id' , sortBy ? sortBy : 'DESC']]
 
         const productObj={
-            where: { 'segmentName':req.params.name } ,
+            // where: { 'segmentName':req.params.name } ,
             include:[
                 {
                     model : oemBrand,
                     attributes:["OEMBrand","OEMBrandImage"],
                     where :{}
                 }],
-            attributes :["oemBrand.OEMBrand","oemBrand.OEMBrandImage"],
-            group : ["oemBrand.OEMBrand"]
+            attributes :["segmentName","oemBrand.OEMBrand","oemBrand.OEMBrandImage"],
+            group : ["oemBrand.OEMBrand"],
+            order : sorting,
         }
-
-        if(byAlpha=='1'){
-            productObj.order = [[{model: oemBrand}, 'OEMBrand', 'ASC']]
-        }
-        else if(byAlpha=='2'){
-            productObj.order = [[{model: oemBrand}, 'OEMBrand', 'DESC']]
-        }
-
+        
         let method=segment.findAll(productObj)
 
 
