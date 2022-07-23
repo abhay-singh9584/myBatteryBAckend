@@ -20,6 +20,9 @@ module.exports = {
       categoryPosition: {
         type: Sequelize.STRING
       },
+      subCategoryId :{
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

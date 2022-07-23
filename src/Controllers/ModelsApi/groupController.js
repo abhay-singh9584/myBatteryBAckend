@@ -64,7 +64,7 @@ module.exports = {
         let method = group.findAll(options);
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Group Data Found Successfully'))
@@ -86,7 +86,7 @@ module.exports = {
               id: req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Group Data Deleted Successfully'),SUCCESS)
@@ -130,7 +130,7 @@ module.exports = {
               id:req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Group Data Updated Successfully'),SUCCESS)

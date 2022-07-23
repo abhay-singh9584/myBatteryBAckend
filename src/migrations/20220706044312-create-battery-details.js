@@ -8,6 +8,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      primaryName : {
+        type : Sequelize.STRING
+      },
+      secondaryName : {
+        type : Sequelize.STRING
+      },
+      productImage : {
+        type : Sequelize.STRING
+      },
+      productMediaId : {
+        type : Sequelize.INTEGER
+      },
       brandId: {
         type: Sequelize.INTEGER
       },
@@ -23,14 +35,20 @@ module.exports = {
       schemeId: {
         type: Sequelize.INTEGER
       },
-      secondaryNameId: {
-        type: Sequelize.INTEGER
-      },
       segmentId: {
         type: Sequelize.INTEGER
       },
-      subCategoryId: {
+      productTypeId : {
+        type : Sequelize.INTEGER
+      },
+      categoryId: {
         type: Sequelize.INTEGER
+      },
+      modelDimensionId : {
+        type : Sequelize.INTEGER
+      },
+      productPricingId : {
+        type : Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

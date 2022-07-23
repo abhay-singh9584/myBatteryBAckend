@@ -1,4 +1,4 @@
-const {category}=require('../../models/index')
+const {category,subcategory}=require('../../models/index')
 const {successResponseData, successResponseWithoutData, errorResponseWithoutData, errorResponseData, validationErrorResponseData, validationMessageKey}=require('../../Helper/Responce')
 
 const {SUCCESS, FAIL,NO_DATA} = require("../../Helper/Constant")
@@ -14,6 +14,7 @@ module.exports = {
             categoryDesc : Joi.string().optional().allow(''),
             categoryIcon: Joi.string().optional().allow(''),
             categoryPosition: Joi.number().required(),
+            subCategoryId : Joi.number().required() 
             };
         
             const schema = Joi.object(reqObj);
@@ -26,19 +27,20 @@ module.exports = {
                 );
             }
             
-            let categoryDetails =  await category.findOne({
-                where : {categoryName : body.categoryName  
-                }})
     
             let categoryPositionDetails =  await category.findOne({
                 where : {
                     categoryPosition:body.categoryPosition
             }})
-    
-            if(categoryDetails){
-                return errorResponseWithoutData(res,res.__('Category Already Exists'),FAIL)
+            
+            let subCategoryDetails = await subcategory.findByPk(body.subCategoryId);
+
+            if(!subCategoryDetails){
+                return errorResponseWithoutData(
+                    res,res.__('No Sub Category Exists With Given Id'),FAIL)
             }
-            else if(categoryPositionDetails){
+    
+            if(categoryPositionDetails){
                 return errorResponseWithoutData(res,res.__('Category Position Already Exists'),FAIL)
             }
 
@@ -47,6 +49,7 @@ module.exports = {
                 categoryDesc: body.categoryDesc,
                 categoryIcon: body.categoryIcon,
                 categoryPosition: body.categoryPosition,
+                subCategoryId : body.subCategoryId
             })
             .then((data)=>{
                 if(!data){
@@ -63,6 +66,13 @@ module.exports = {
         const {categoryId} = req.query;
         let options = {
             where :{},
+            include:[
+                {
+                    model : subcategory,
+                    attributes :["id","subCategoryName"],
+                    where :{}
+                }
+            ],
             attributes : { exclude :["createdAt","updatedAt"] }
         }
   
@@ -73,7 +83,7 @@ module.exports = {
         let method = category.findAll(options);
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Category Data Found Successfully'))
@@ -95,7 +105,7 @@ module.exports = {
               id: req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Category Data Deleted Successfully'),SUCCESS)
@@ -112,6 +122,7 @@ module.exports = {
             categoryDesc : Joi.string().optional().allow(''),
             categoryIcon: Joi.string().optional().allow(''),
             categoryPosition: Joi.number().required(),
+            subCategoryId : Joi.number().required() 
             };
         
         const schema = Joi.object(reqObj);
@@ -134,12 +145,13 @@ module.exports = {
             categoryDesc: body.categoryDesc,
             categoryIcon: body.categoryIcon,
             categoryPosition: body.categoryPosition,
+            subCategoryId : body.subCategoryId
          }, {
             where: {
               id:req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Category Data Updated Successfully'),SUCCESS)

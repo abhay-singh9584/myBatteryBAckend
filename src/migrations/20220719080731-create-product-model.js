@@ -1,23 +1,29 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('subcategories', {
+    await queryInterface.createTable('productModels', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      subcategoryName: {
+      modelName: {
         type: Sequelize.STRING
       },
-      subcategoryDesc: {
+      modelIcon: {
         type: Sequelize.STRING
       },
-      subcategoryIcon: {
+      modelDesc: {
         type: Sequelize.STRING
       },
-      subcategoryPosition: {
+      modelPosition: {
+        type: Sequelize.INTEGER
+      },
+      brandId: {
+        type: Sequelize.INTEGER
+      },
+      groupId: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -31,6 +37,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('subcategories');
+    await queryInterface.dropTable('productModels');
   }
 };

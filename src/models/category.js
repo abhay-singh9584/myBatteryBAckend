@@ -10,13 +10,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      category.hasOne(models.subcategory,{
+        sourceKey :'subCategoryId',
+        foreignKey :'id'
+      }) 
     }
   }
   category.init({
     categoryName: DataTypes.STRING,
     categoryDesc: DataTypes.STRING,
     categoryIcon: DataTypes.STRING,
-    categoryPosition: DataTypes.INTEGER
+    categoryPosition: DataTypes.INTEGER,
+    subCategoryId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'category',

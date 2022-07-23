@@ -13,7 +13,6 @@ module.exports = {
             subcategoryDesc : Joi.string().optional().allow(''),
             subcategoryIcon: Joi.string().optional().allow(''),
             subcategoryPosition: Joi.number().required(),
-            categoryId: Joi.number().required(),
             };
         
         const schema = Joi.object(reqObj);
@@ -25,21 +24,15 @@ module.exports = {
                 (validationMessageKey("Service Validation", error))
             );
         }
-        
-        let subCategoryDetails =  await subcategory.findOne({
-            where : {subcategoryName : body.subcategoryName ,
-                categoryId:body.categoryId
-            }})
+    
             
         let subCategoryPositionDetails =  await subcategory.findOne({
             where : {
                 subcategoryPosition:body.subcategoryPosition
         }})
     
-        if(subCategoryDetails){
-            return errorResponseWithoutData(res,res.__('SubCategory Already Exists'),FAIL)
-        }
-        else if(subCategoryPositionDetails){
+
+        if(subCategoryPositionDetails){
             return errorResponseWithoutData(res,res.__('SubCategory Position Already Exists'),FAIL)
         }
             
@@ -48,7 +41,6 @@ module.exports = {
             subcategoryDesc: body.subcategoryDesc,
             subcategoryIcon: body.subcategoryIcon,
             subcategoryPosition: body.subcategoryPosition,
-            categoryId:body.categoryId
         })
         .then((data)=>{
             if(!data){
@@ -62,23 +54,13 @@ module.exports = {
 
      subCategoryGetService : async (req,res,next)=>{
 
-        const {subcategoryId ,categoryId} = req.query;
+        const {subcategoryId } = req.query;
 
         let options = {
             where :{},
-            include:[
-                {
-                    model : category,
-                    attributes :["id","categoryName"],
-                    where :{}
-                }
-            ],
             attributes : { exclude :["createdAt","updatedAt"] }
         }
 
-        if(categoryId){
-            options["include"][0]["where"]['id'] =  categoryId 
-        }
 
         let method = subcategory.findAll(options);
 
@@ -88,7 +70,7 @@ module.exports = {
         }
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Sub Category Data Found Successfully'))
@@ -127,7 +109,6 @@ module.exports = {
             subcategoryDesc : Joi.string().optional().allow(''),
             subcategoryIcon: Joi.string().optional().allow(''),
             subcategoryPosition: Joi.number().required(),
-            categoryId: Joi.number().required(),
             };
         
         const schema = Joi.object(reqObj);
@@ -151,7 +132,6 @@ module.exports = {
             subcategoryDesc: body.subcategoryDesc,
             subcategoryIcon: body.subcategoryIcon,
             subcategoryPosition: body.subcategoryPosition,
-            categoryId:body.categoryId
 
          }, {
             where: {

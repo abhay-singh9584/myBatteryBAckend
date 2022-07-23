@@ -89,7 +89,7 @@ module.exports = {
         }
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('OEM Model Data Found Successfully'))
@@ -113,7 +113,7 @@ module.exports = {
               id: req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('OEM Model Data Deleted Successfully'),SUCCESS)
@@ -160,7 +160,7 @@ module.exports = {
               id:req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('OEM Model Data Updated Successfully'),SUCCESS)

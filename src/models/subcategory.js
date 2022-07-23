@@ -12,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      subcategory.hasOne(models.category,{
-        sourceKey :'categoryId',
-        foreignKey :'id'
-      }) 
     }
   }
   subcategory.init({
@@ -23,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     subcategoryDesc: DataTypes.STRING,
     subcategoryIcon: DataTypes.STRING,
     subcategoryPosition: DataTypes.INTEGER,
-    categoryId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'subcategory',

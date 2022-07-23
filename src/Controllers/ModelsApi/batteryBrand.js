@@ -28,19 +28,12 @@ module.exports={
             );
         }
 
-        let batteryBrandDetails =  await batteryBrand.findOne({
-            where : {brandName : body.brandName 
-            }})
-            
         let batteryBrandPositionDetails =  await batteryBrand.findOne({
             where : {
                 brandPosition:body.brandPosition
         }})
 
-        if(batteryBrandDetails){
-            return errorResponseWithoutData(res,res.__('BatteryBrand Already Exists'),FAIL)
-        }
-        else if(batteryBrandPositionDetails){
+        if(batteryBrandPositionDetails){
             return errorResponseWithoutData(res,res.__('BatteryBrand Position Already Exists'),FAIL)
         }
             
@@ -63,7 +56,7 @@ module.exports={
 
     batteryBrandGetService : async (req,res)=>{
 
-        const {brandId,sortBy} = req.query;
+        const { brandId,sortBy } = req.query;
 
             let options = {
                 where :{},
@@ -79,7 +72,7 @@ module.exports={
             let method = batteryBrand.findAll(options);
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Brand Data Found Successfully'))
@@ -102,10 +95,10 @@ module.exports={
             id: req.params.id
             }
         }).then((data)=>{
-            if(!data){
-                return errorResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
-            }
-            return successResponseWithoutData(res,res.__('Brand Data Deleted Successfully'),SUCCESS)
+        if(!data.length>0){
+            return errorResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+        }
+        return successResponseWithoutData(res,res.__('Brand Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
@@ -122,38 +115,38 @@ module.exports={
             brandPosition: Joi.number().required(),
             };
         
-            const schema = Joi.object(reqObj);
-            const { error } = schema.validate(body);
-        
-            if (error) {
-                return validationErrorResponseData(
-                    res,
-                    (validationMessageKey("Service Validation", error))
-                );
-            }
-        
-            const batteryBrandDetails=await batteryBrand.findOne({where:{id:req.params.id}})
-            if(!batteryBrandDetails){
-                return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
-            }
+        const schema = Joi.object(reqObj);
+        const { error } = schema.validate(body);
+    
+        if (error) {
+            return validationErrorResponseData(
+                res,
+                (validationMessageKey("Service Validation", error))
+            );
+        }
+    
+        const batteryBrandDetails=await batteryBrand.findOne({where:{id:req.params.id}})
+        if(!batteryBrandDetails){
+            return errorResponseWithoutData(res,'No Such Id Found',NO_DATA)
+        }
 
-            await batteryBrand.update({ 
-                brandName: body.brandName,
-                brandLogo: body.brandLogo,
-                brandDesc: body.brandDesc,
-                brandIcon: body.brandIcon,
-                brandPosition: body.brandPosition,
-            }, {
-                where: {
-                id:req.params.id
-                }
-            }).then((data)=>{
-                if(!data){
-                    return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
-                }
-                return successResponseWithoutData(res,res.__('Brand Data Updated Successfully'),SUCCESS)
-            }).catch((err)=>{ 
-                return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
-            })
+        await batteryBrand.update({ 
+            brandName: body.brandName,
+            brandLogo: body.brandLogo,
+            brandDesc: body.brandDesc,
+            brandIcon: body.brandIcon,
+            brandPosition: body.brandPosition,
+        }, {
+            where: {
+            id:req.params.id
+            }
+        }).then((data)=>{
+            if(!data.length>0){
+                return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+            }
+            return successResponseWithoutData(res,res.__('Brand Data Updated Successfully'),SUCCESS)
+        }).catch((err)=>{ 
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
+        })
     }
 }

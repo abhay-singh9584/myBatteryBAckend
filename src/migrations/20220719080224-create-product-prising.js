@@ -1,59 +1,47 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('modelDimensions', {
+    await queryInterface.createTable('productPricings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      lengthUnit: {
+      mrpIcon: {
         type: Sequelize.STRING
       },
-      lengthValue: {
-        type: Sequelize.INTEGER
-      },
-      widthUnit: {
+      mrpUnit: {
         type: Sequelize.STRING
       },
-      widthValue: {
+      mrpValue: {
         type: Sequelize.INTEGER
       },
-      heightUnit: {
+      mopIcon: {
         type: Sequelize.STRING
       },
-      heightValue: {
-        type: Sequelize.INTEGER
-      },
-      layoutValue: {
-        type: Sequelize.INTEGER
-      },
-      acidIndicatorUnit: {
+      mopUnit: {
         type: Sequelize.STRING
       },
-      acidIndicatorValue: {
+      mopValue: {
         type: Sequelize.INTEGER
       },
-      currentCapacityUnit: {
+      dpIcon: {
         type: Sequelize.STRING
       },
-      currentCapacityValue: {
-        type: Sequelize.INTEGER
-      },
-      weightUnit: {
+      dpUnit: {
         type: Sequelize.STRING
       },
-      weightValue: {
+      dpValue: {
         type: Sequelize.INTEGER
       },
-      warrantyUnit: {
+      nlcIcon: {
         type: Sequelize.STRING
       },
-      warrantyValue: {
-        type: Sequelize.INTEGER
+      nlcUnit: {
+        type: Sequelize.STRING
       },
-      warrantyDesc: {
+      nlcValue: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -67,6 +55,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('modelDimensions');
+    await queryInterface.dropTable('productPricings');
   }
 };

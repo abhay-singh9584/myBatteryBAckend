@@ -23,19 +23,20 @@ module.exports = {
                 (validationMessageKey("Service Validation", error))
             );
         }
-    
-        // let oemBrandDetails =  await oemBrand.findOne({
-        //     where : {OEMBrand : body.OEMBrand 
-        //     }})
-
-        // if(oemBrandDetails){
-        //     return errorResponseWithoutData(res,res.__('oemBrand Already Exists'),FAIL)
-        // }
+        
+        const oemBrandDetail=oemBrand.findOne({where:{
+            OEMBrand: body.OEMBrand,
+            OEMBrandImage: body.OEMBrandImage,
+            OEMB: body.OEMB} })
+        
+        if(oemBrandDetail){
+            return errorResponseWithoutData(res,res.__('OEM Brand Already Exist'),FAIL)
+        }
 
         await oemBrand.create({
             OEMBrand: body.OEMBrand,
             OEMBrandImage: body.OEMBrandImage,
-            OEMB: body.OEMB,
+            OEMB: body.OEMB
         })
         .then((data)=>{
             if(!data){
@@ -63,7 +64,7 @@ module.exports = {
         let method = oemBrand.findAll(options);
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('OEM Brand Data Found Successfully'))
@@ -87,7 +88,7 @@ module.exports = {
               id: req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('OEM Brand Data Deleted Successfully'),SUCCESS)
@@ -129,7 +130,7 @@ module.exports = {
               id:req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('OEM Brand Data Updated Successfully'),SUCCESS)

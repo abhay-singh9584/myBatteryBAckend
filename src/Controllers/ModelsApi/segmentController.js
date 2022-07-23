@@ -1,4 +1,4 @@
-const {segment,oemBrand}=require('../../models')
+const {segment,batteryBrand}=require('../../models')
 const {successResponseData,validationMessageKey, successResponseWithoutData, errorResponseWithoutData, errorResponseData, validationErrorResponseData}=require('../../Helper/Responce')
 const Joi = require('joi')
 const { SUCCESS, FAIL, NO_DATA } = require('../../Helper/Constant')
@@ -26,11 +26,11 @@ module.exports ={
         );
     }
 
-    let OEMDetails = await oemBrand.findByPk(body.segmentBrandId);
+    let brandDetails = await batteryBrand.findByPk(body.segmentBrandId);
 
-    if(!OEMDetails){
+    if(!brandDetails){
         return errorResponseWithoutData(
-            res,res.__('No OEM Brand Exists With Given Id'),FAIL)
+            res,res.__('No Battery Brand Exists With Given Id'),FAIL)
     }
 
     let segmentObj = {
@@ -80,8 +80,8 @@ module.exports ={
             where :{},
                 include:[
                     {
-                        model : oemBrand,
-                        attributes :["id","OEMBrand"],
+                        model : batteryBrand,
+                        attributes :["id","brandName"],
                         where :{}
                     }
             ],
@@ -108,7 +108,7 @@ module.exports ={
         // }
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Segment Found Successfully'))

@@ -11,44 +11,42 @@ module.exports = {
         const body=req.body
 
         const reqObj = {
-            modelName: Joi.string().required(),
-            modelDesc : Joi.string().optional().allow(''),
-            modelIcon: Joi.string().optional().allow(''),
-            modelPosition: Joi.number().required(),
-            length:Joi.number().optional().allow(''),
-            width:Joi.number().optional().allow(''),
-            height:Joi.number().optional().allow(''),
-            layout:Joi.number().optional().allow(''),
-            acidIndicator:Joi.number().optional().allow(''),
-            currentCapacity:Joi.number().optional().allow(''),
-            mrp:Joi.number().optional().allow(''),
-            mop:Joi.number().optional().allow(''),
-            dp:Joi.number().optional().allow(''),
-            nlc:Joi.number().optional().allow(''),
-            warranty:Joi.number().optional().allow(''),
-            warrantyDesc:Joi.string().optional().allow(''),
-            weight:Joi.number().optional().allow(''),
-            };
+          lengthUnit: Joi.string().optional().allow(""),
+          lengthValue: Joi.number().optional().allow(""),
+          widthUnit: Joi.string().optional().allow(""),
+          widthValue: Joi.number().optional().allow(""),
+          heightUnit: Joi.string().optional().allow(""),
+          heightValue: Joi.number().optional().allow(""),
+          layoutValue: Joi.number().optional().allow(""),
+          acidIndicatorUnit: Joi.string().optional().allow(""),
+          acidIndicatorValue: Joi.number().optional().allow(""),
+          currentCapacityUnit: Joi.string().optional().allow(""),
+          currentCapacityValue: Joi.number().optional().allow(""),
+          warrantyUnit: Joi.string().optional().allow(""),
+          warrantyValue: Joi.number().optional().allow(""),
+          warrantyDesc: Joi.string().optional().allow(""),
+          weightUnit: Joi.string().optional().allow(""),
+          weightValue: Joi.number().optional().allow(""),
+        };
 
-            const modelObj={
-                modelName: body.modelName,
-                modelDesc : body.modelDesc,
-                modelIcon: body.modelIcon,
-                modelPosition: body.modelPosition,
-                length:body.length,
-                width:body.width,
-                height:body.height,
-                layout:body.layout,
-                acidIndicator:body.acidIndicator,
-                currentCapacity:body.currentCapacity,
-                mrp:body.mrp,
-                mop:body.mop,
-                dp:body.dp,
-                nlc:body.nlc,
-                warranty:body.warranty,
-                warrantyDesc:body.warrantyDesc,
-                weight:body.weight,
-            }
+        const modelObj = {
+            lengthUnit: body.lengthUnit,
+            lengthValue: body.lengthValue,
+            widthUnit: body.widthUnit,
+            widthValue: body.widthValue,
+            heightUnit: body.heightUnit,
+            heightValue: body.heightValue,
+            layoutValue: body.layoutValue,
+            acidIndicatorUnit: body.acidIndicatorUnit,
+            acidIndicatorValue: body.acidIndicatorValue,
+            currentCapacityUnit: body.currentCapacityUnit,
+            currentCapacityValue: body.currentCapacityValue,
+            warrantyUnit: body.warrantyUnit,
+            warrantyValue: body.warrantyValue,
+            warrantyDesc: body.warrantyDesc,
+            weightUnit: body.weightUnit,
+            weightValue: body.weightValue,
+        };
         
         const schema = Joi.object(reqObj);
         const { error } = schema.validate(body);
@@ -59,23 +57,12 @@ module.exports = {
                 (validationMessageKey("Service Validation", error))
             );
         }
+        const modelDimensionDetails=modelDimension.findOne({where : modelObj})
         
-        let modelDimensionDetails =  await modelDimension.findOne({
-            where : {modelName : body.modelName  
-            }})
-
-        let modelDimensionPositionDetails =  await modelDimension.findOne({
-            where : {
-                modelPosition:body.modelPosition
-        }})
-
         if(modelDimensionDetails){
-            return errorResponseWithoutData(res,res.__('Model Already Exists'),FAIL)
+            return errorResponseWithoutData(res,res.__('Data Already Exist'),FAIL)
         }
-        else if(modelDimensionPositionDetails){
-            return errorResponseWithoutData(res,res.__('Model Position Already Exists'),FAIL)
-        }
-
+        
         await modelDimension.create(modelObj)
         .then((data)=>{
             if(!data){
@@ -83,6 +70,7 @@ module.exports = {
             }
             return successResponseData(res,data,SUCCESS,res.__('Model Data Added Successfully'))
         }).catch((err)=>{ 
+            console.log(err)
             return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
@@ -102,7 +90,7 @@ module.exports = {
         let method = modelDimension.findAll(options);
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Model Data Found Successfully'))
@@ -124,7 +112,7 @@ module.exports = {
               id: req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('model Data Deleted Successfully'),SUCCESS)
@@ -137,43 +125,41 @@ module.exports = {
 
         body=req.body
         const reqObj = {
-            modelName: Joi.string().required(),
-            modelDesc : Joi.string().optional().allow(''),
-            modelIcon: Joi.string().optional().allow(''),
-            modelPosition: Joi.number().required(),
-            length:Joi.number().optional().allow(''),
-            width:Joi.number().optional().allow(''),
-            height:Joi.number().optional().allow(''),
-            layout:Joi.number().optional().allow(''),
-            acidIndicator:Joi.number().optional().allow(''),
-            currentCapacity:Joi.number().optional().allow(''),
-            mrp:Joi.number().optional().allow(''),
-            mop:Joi.number().optional().allow(''),
-            dp:Joi.number().optional().allow(''),
-            nlc:Joi.number().optional().allow(''),
-            warranty:Joi.number().optional().allow(''),
-            warrantyDesc:Joi.string().optional().allow(''),
-            weight:Joi.number().optional().allow(''),
-            };
-        const modelObj={
-            modelName: body.modelName,
-            modelDesc : body.modelDesc,
-            modelIcon: body.modelIcon,
-            modelPosition: body.modelPosition,
-            length:body.length,
-            width:body.width,
-            height:body.height,
-            layout:body.layout,
-            acidIndicator:body.acidIndicator,
-            currentCapacity:body.currentCapacity,
-            mrp:body.mrp,
-            mop:body.mop,
-            dp:body.dp,
-            nlc:body.nlc,
-            warranty:body.warranty,
-            warrantyDesc:body.warrantyDesc,
-            weight:body.weight,
-        }
+          lengthUnit: Joi.string().optional().allow(""),
+          lengthValue: Joi.number().optional().allow(""),
+          widthUnit: Joi.string().optional().allow(""),
+          widthValue: Joi.number().optional().allow(""),
+          heightUnit: Joi.string().optional().allow(""),
+          heightValue: Joi.number().optional().allow(""),
+          layoutValue: Joi.number().optional().allow(""),
+          acidIndicatorUnit: Joi.string().optional().allow(""),
+          acidIndicatorValue: Joi.number().optional().allow(""),
+          currentCapacityUnit: Joi.string().optional().allow(""),
+          currentCapacityValue: Joi.number().optional().allow(""),
+          warrantyUnit: Joi.string().optional().allow(""),
+          warrantyValue: Joi.number().optional().allow(""),
+          warrantyDesc: Joi.string().optional().allow(""),
+          weightUnit: Joi.string().optional().allow(""),
+          weightValue: Joi.number().optional().allow(""),
+        };
+        const modelObj = {
+          lengthUnit: body.lengthUnit,
+          lengthValue: body.lengthValue,
+          widthUnit: body.widthUnit,
+          widthValue: body.widthValue,
+          heightUnit: body.heightUnit,
+          heightValue: body.heightValue,
+          layoutValue: body.layoutValue,
+          acidIndicatorUnit: body.acidIndicatorUnit,
+          acidIndicatorValue: body.acidIndicatorValue,
+          currentCapacityUnit: body.currentCapacityUnit,
+          currentCapacityValue: body.currentCapacityValue,
+          warrantyUnit: body.warrantyUnit,
+          warrantyValue: body.warrantyValue,
+          warrantyDesc: body.warrantyDesc,
+          weightUnit: body.weightUnit,
+          weightValue: body.weightValue,
+        };
         
         const schema = Joi.object(reqObj);
         const { error } = schema.validate(body);
@@ -195,7 +181,7 @@ module.exports = {
               id:req.params.id
             }
           }).then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Model Data Updated Successfully'),SUCCESS)

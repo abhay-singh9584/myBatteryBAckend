@@ -15,10 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey :'brandId',
         foreignKey :'id'
       }) ,
-      batteryDetail.hasOne(models.modelDimension,{
-        sourceKey :'modelId',
-        foreignKey :'id'
-      }) ,
       batteryDetail.hasOne(models.group,{
         sourceKey :'groupId',
         foreignKey :'id'
@@ -31,29 +27,52 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey :'schemeId',
         foreignKey :'id'
       }) ,
-      batteryDetail.hasOne(models.secondaryName,{
-        sourceKey :'secondaryNameId',
-        foreignKey :'id'
-      }) ,
       batteryDetail.hasOne(models.segment,{
         sourceKey :'segmentId',
         foreignKey :'id'
       }) ,
-      batteryDetail.hasOne(models.subcategory,{
-        sourceKey :'subCategoryId',
+      batteryDetail.hasOne(models.category,{
+        sourceKey :'categoryId',
         foreignKey :'id'
-      })
+      }) ,
+      batteryDetail.hasOne(models.productPricing,{
+        sourceKey :'productPricingId',
+        foreignKey :'id'
+      }) ,
+      batteryDetail.hasOne(models.modelDimension,{
+        sourceKey :'modelDimensionId',
+        foreignKey :'id'
+      }) ,
+      batteryDetail.hasOne(models.productType,{
+        sourceKey :'productTypeId',
+        foreignKey :'id'
+      }),
+      batteryDetail.hasOne(models.productMedia,{
+        sourceKey :'productMediaId',
+        foreignKey :'id'
+      }) ,
+      batteryDetail.hasOne(models.productModel,{
+        sourceKey :'modelId',
+        foreignKey :'id'
+      }) 
     }
   }
+
   batteryDetail.init({
+    primaryName: DataTypes.STRING,
+    secondaryName: DataTypes.STRING,
+    productImage: DataTypes.STRING,
+    productMediaId: DataTypes.INTEGER,
     brandId: DataTypes.INTEGER,
     modelId: DataTypes.INTEGER,
     groupId: DataTypes.INTEGER,
     oemModelId: DataTypes.INTEGER,
     schemeId: DataTypes.INTEGER,
-    secondaryNameId: DataTypes.INTEGER,
     segmentId: DataTypes.INTEGER,
-    subCategoryId: DataTypes.INTEGER
+    categoryId: DataTypes.INTEGER,
+    productTypeId: DataTypes.INTEGER,
+    modelDimensionId: DataTypes.INTEGER,
+    productPricingId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'batteryDetail',

@@ -88,7 +88,7 @@ module.exports ={
         }
 
         method.then((data)=>{
-            if(!data){
+            if(!data.length>0){
                 return successResponseWithoutData(res, res.__('No scheme Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('scheme Found Successfully'))

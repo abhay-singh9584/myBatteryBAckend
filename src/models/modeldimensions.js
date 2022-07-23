@@ -14,23 +14,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   modelDimension.init({
-    modelName: DataTypes.STRING,
-    modelDesc: DataTypes.STRING,
-    modelIcon: DataTypes.STRING,
-    modelPosition: DataTypes.INTEGER,
-    length: DataTypes.INTEGER,
-    width: DataTypes.INTEGER,
-    height: DataTypes.INTEGER,
-    layout: DataTypes.INTEGER,
-    acidIndicator: DataTypes.INTEGER,
-    currentCapacity: DataTypes.INTEGER,
-    mrp: DataTypes.INTEGER,
-    mop: DataTypes.INTEGER,
-    dp: DataTypes.INTEGER,
-    nlc: DataTypes.INTEGER,
-    warranty: DataTypes.INTEGER,
+    lengthUnit: DataTypes.STRING,
+    lengthValue: DataTypes.INTEGER,
+    widthUnit: DataTypes.STRING,
+    widthValue: DataTypes.INTEGER,
+    heightUnit: DataTypes.STRING,
+    heightValue: DataTypes.INTEGER,
+    layoutValue: DataTypes.INTEGER,
+    acidIndicatorUnit: DataTypes.STRING,
+    acidIndicatorValue: DataTypes.INTEGER,
+    currentCapacityUnit: DataTypes.STRING,
+    currentCapacityValue: DataTypes.INTEGER,
+    warrantyUnit: DataTypes.STRING,
+    warrantyValue: DataTypes.INTEGER,
     warrantyDesc: DataTypes.STRING,
-    weight: DataTypes.INTEGER
+    weightUnit: DataTypes.STRING,
+    weightValue: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'modelDimension',
