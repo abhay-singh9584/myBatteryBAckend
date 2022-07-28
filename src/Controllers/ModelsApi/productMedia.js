@@ -22,6 +22,16 @@ module.exports = {
                 (validationMessageKey("Service Validation", error))
             );
         }
+
+        let productMediaDetails =  await productMedia.findOne({
+            where : {ProductImages: body.ProductImages,
+                productVideos: body.productVideos,
+        }})
+
+        if(productMediaDetails.length>0){
+            return errorResponseWithoutData(res,res.__('Data Already Exists'),FAIL)
+        }
+
     
         await productMedia.create({
             ProductImages: body.ProductImages,

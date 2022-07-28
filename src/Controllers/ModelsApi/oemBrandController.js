@@ -7,7 +7,7 @@ module.exports = {
 
     oemBrandCreateController : async (req,res,next)=>{
         
-        body=req.body
+        const body=req.body
         const reqObj = {
             OEMBrand: Joi.string().required().allow(''),
             OEMBrandImage : Joi.string().optional().allow(''),
@@ -29,7 +29,7 @@ module.exports = {
             OEMBrandImage: body.OEMBrandImage,
             OEMB: body.OEMB} })
         
-        if(oemBrandDetail){
+        if(oemBrandDetail.length>0){
             return errorResponseWithoutData(res,res.__('OEM Brand Already Exist'),FAIL)
         }
 

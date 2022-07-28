@@ -27,7 +27,7 @@ module.exports = {
           warrantyDesc: Joi.string().optional().allow(""),
           weightUnit: Joi.string().optional().allow(""),
           weightValue: Joi.number().optional().allow(""),
-        };
+        };  
 
         const modelObj = {
             lengthUnit: body.lengthUnit,
@@ -59,7 +59,7 @@ module.exports = {
         }
         const modelDimensionDetails=modelDimension.findOne({where : modelObj})
         
-        if(modelDimensionDetails){
+        if(modelDimensionDetails.length>0){
             return errorResponseWithoutData(res,res.__('Data Already Exist'),FAIL)
         }
         

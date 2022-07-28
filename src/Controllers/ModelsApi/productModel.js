@@ -43,10 +43,29 @@ module.exports = {
     };
 
     let productModelDetails = await productModel.findOne({
-      where: { modelName: body.modelName, groupId: body.groupId},
+      where: { productModelObj},
     });
 
-    if (productModelDetails) {
+    let brandDetails = await batteryBrand.findByPk(body.brandId);
+    let groupDetails = await group.findByPk(body.groupId);
+
+    if(brandDetails){
+      return errorResponseWithoutData(
+        res,
+        res.__("No Battery Brand Exists with given id"),
+        FAIL
+      );
+    }
+
+    if(groupDetails){
+      return errorResponseWithoutData(
+        res,
+        res.__("No Group Exists with given id"),
+        FAIL
+      );
+    }
+
+    if (productModelDetails.length>0) {
       return errorResponseWithoutData(
         res,
         res.__("productModel Already Exists"),

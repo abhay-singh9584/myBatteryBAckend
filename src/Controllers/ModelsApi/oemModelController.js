@@ -12,7 +12,6 @@ module.exports = {
         const reqObj = {
             OEMModelName: Joi.string().required(),
             FuelType: Joi.string().required(),
-            OEMModelDesc : Joi.string().optional().allow(''),
             OEMModelImage: Joi.string().optional().allow(''),
             OEMModelPosition: Joi.number().required(),
             OEMBrandId:Joi.number().required()
@@ -38,7 +37,7 @@ module.exports = {
                 OEMModelPosition:body.OEMModelPosition
         }})
 
-        if(oemModelDetails){
+        if(oemModelDetails.length>0){
             return errorResponseWithoutData(res,res.__('OEMModel Already Exists'),FAIL)
         }
         else if(oemModelPositionDetails){
@@ -128,7 +127,6 @@ module.exports = {
         const reqObj = {
             OEMModelName: Joi.string().required(),
             FuelType: Joi.string().required(),
-            OEMModelDesc : Joi.string().optional().allow(''),
             OEMModelImage: Joi.string().optional().allow(''),
             OEMModelPosition: Joi.number().required(),
             OEMBrandId:Joi.number().required()

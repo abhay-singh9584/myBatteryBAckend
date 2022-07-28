@@ -110,5 +110,8 @@
 	"No Such Id Found": "No Such Id Found",
 	"No ModelDimension Exists With Given Id": "No ModelDimension Exists With Given Id",
 	"Data Already Exist": "Data Already Exist",
-	"BatteryBrand Position Already Exists": "BatteryBrand Position Already Exists"
+	"BatteryBrand Position Already Exists": "BatteryBrand Position Already Exists",
+	"No Model Exists With Given Id": "No Model Exists With Given Id",
+	"productModel Already Exists": "productModel Already Exists",
+	"OEM Brand Already Exist": "OEM Brand Already Exist"
 }

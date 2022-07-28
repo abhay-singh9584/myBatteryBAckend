@@ -510,7 +510,7 @@ const {
  * @access Private
  */
 router.post(
-  "/createmodelDimension",
+  "/createModelDimension",
   isAuthenticRequest,
   modelDimensionCreateController
 );

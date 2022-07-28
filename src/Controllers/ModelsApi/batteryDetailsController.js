@@ -59,7 +59,7 @@ module.exports={
 
 
         let brandDetails = await batteryBrand.findByPk(body.brandId);
-        let modelDetails = await modelDimension.findByPk(body.modelId);
+        let modelDetails = await productModel.findByPk(body.modelId);
         let groupDetails = await group.findByPk(body.groupId);
         let categoryDetails = await category.findByPk(body.categoryId);
         let oemModelDetails = await oemModel.findByPk(body.oemModelId);
@@ -145,7 +145,7 @@ module.exports={
             where : detailsObj
         })    
 
-        if(Details){
+        if(Details.length>0){
             return errorResponseWithoutData(res,res.__('Battery Details Already Exists'),FAIL)
         }
             
