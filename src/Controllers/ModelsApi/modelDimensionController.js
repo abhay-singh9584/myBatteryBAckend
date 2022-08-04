@@ -57,16 +57,16 @@ module.exports = {
                 (validationMessageKey("Service Validation", error))
             );
         }
-        const modelDimensionDetails=modelDimension.findOne({where : modelObj})
-        
-        if(modelDimensionDetails.length>0){
+        const modelDimensionDetails=await modelDimension.findOne({where : modelObj})
+
+        if(modelDimensionDetails){
             return errorResponseWithoutData(res,res.__('Data Already Exist'),FAIL)
         }
         
         await modelDimension.create(modelObj)
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Model Data Added Successfully'))
         }).catch((err)=>{ 
@@ -91,7 +91,7 @@ module.exports = {
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Model Data Found Successfully'))
         }).catch((err)=>{ 
@@ -113,7 +113,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('model Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -182,7 +182,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Model Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

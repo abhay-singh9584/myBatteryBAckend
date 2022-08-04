@@ -1,4 +1,4 @@
-const { productModel, group,batteryBrand } = require("../../models");
+const { productModel,modelgroup, group,batteryBrand } = require("../../models");
 const {
   successResponseData,
   validationMessageKey,
@@ -20,7 +20,7 @@ module.exports = {
       modelDesc: Joi.string().optional().allow(""),
       modelUrl: Joi.string().required(),
       brandId: Joi.string().required(),
-      groupId: Joi.number().required(),
+      groupId: Joi.array().required(),
     };
 
     const schema = Joi.object(reqObj);
@@ -38,16 +38,17 @@ module.exports = {
       modelType: body.modelType,
       modelDesc: body.modelDesc,
       modelUrl: body.modelUrl,
-      groupId: body.groupId,
       brandId: body.brandId
     };
 
-    let productModelDetails = await productModel.findOne({
-      where: { productModelObj},
-    });
+    const groupIdArray=body.groupId
+
+    // let productModelDetails = await productModel.findOne({
+    //   where: { productModelObj},
+    // });
 
     let brandDetails = await batteryBrand.findByPk(body.brandId);
-    let groupDetails = await group.findByPk(body.groupId);
+    // let groupDetails = await group.findByPk(body.groupId);
 
     if(brandDetails){
       return errorResponseWithoutData(
@@ -57,46 +58,55 @@ module.exports = {
       );
     }
 
-    if(groupDetails){
-      return errorResponseWithoutData(
-        res,
-        res.__("No Group Exists with given id"),
-        FAIL
-      );
-    }
+    // if(groupDetails){
+    // return errorResponseWithoutData(
+    //   res,
+    //     res.__("No Group Exists with given id"),
+    //     FAIL
+    //   );
+    // }
 
-    if (productModelDetails.length>0) {
-      return errorResponseWithoutData(
-        res,
-        res.__("productModel Already Exists"),
-        FAIL
-      );
-    }
+    // if (productModelDetails.length>0) {
+    //   return errorResponseWithoutData(
+    //     res,
+    //     res.__("productModel Already Exists"),
+    //     FAIL
+    //   );
+    // }
 
     await productModel
       .create(productModelObj)
       .then((data) => {
         if (!data) {
-          return successResponseWithoutData(
-            res,
-            res.__(res.__("Something Went Wrong")),
-            NO_DATA
-          );
+          return errorResponseWithoutData(res,res.__(res.__("Something Went Wrong")),NO_DATA);
         }
-        return successResponseData(
-          res,
-          data,
-          SUCCESS,
-          res.__("productModel Added Successfully")
-        );
+
+        const modelGroupObj=[]
+
+        groupIdArray.forEach(async (groupData,i)=>{
+
+            const obj={
+                groupId:groupData,
+                modelId:data.id,
+            }
+            modelGroupObj.push(obj)
+
+        })
+        modelgroup.bulkCreate(modelGroupObj)
+        .then((groupModel)=>{
+            if(!groupModel.length>0){
+                return errorResponseWithoutData(res, res.__('No Model Data Found'),NO_DATA)
+            }
+            return successResponseData(res,groupModel,SUCCESS,res.__('Model Found Successfully'))
+        }).catch((err)=>{ 
+          console.log(err);
+          return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
       })
-      .catch((err) => {
-        return errorResponseWithoutData(
-          res,
-          res.__("Something Went Wrong"),
-          FAIL
-        );
-      });
+        }).catch((err)=>{ 
+            console.log(err);
+            return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
+        })
+        
   },
 
   productModelGetService: async (req, res) => {
@@ -132,7 +142,7 @@ module.exports = {
     method
       .then((data) => {
         if (!data.length>0) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No productModel Data Found"),
             NO_DATA
@@ -170,7 +180,7 @@ module.exports = {
       })
       .then((data) => {
         if (!data) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No productModel Data Found"),
             NO_DATA
@@ -199,7 +209,7 @@ module.exports = {
         modelDesc: Joi.string().optional().allow(""),
         modelUrl: Joi.string().required(),
         brandId: Joi.string().required(),
-        groupId: Joi.number().required(),
+        groupId: Joi.array().required(),
     };
 
     const schema = Joi.object(reqObj);
@@ -226,7 +236,6 @@ module.exports = {
             modelType: body.modelType,
             modelDesc: body.modelDesc,
             modelUrl: body.modelUrl,
-            groupId: body.modelGroupId,
             brandId: body.brandId
         },
         {
@@ -237,7 +246,7 @@ module.exports = {
       )
       .then((data) => {
         if (!data) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No productModel Data Found"),
             NO_DATA

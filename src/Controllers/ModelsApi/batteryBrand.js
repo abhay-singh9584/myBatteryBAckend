@@ -46,9 +46,9 @@ module.exports={
         })
         .then((battery_data)=>{
             if(!battery_data){
-                return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
             }
-            return successResponseData(res,battery_data,SUCCESS,res.__('Brand Data Found Successfully'))
+            return successResponseData(res,battery_data,SUCCESS,res.__('Brand Data Created Successfully'))
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
@@ -73,7 +73,7 @@ module.exports={
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Brand Data Found Successfully'))
         }).catch((err)=>{ 
@@ -106,7 +106,7 @@ module.exports={
 
     batteryBrandUpdateController : async (req,res)=>{
 
-        body=req.body
+        const body=req.body
         const reqObj = {
             brandName: Joi.string().required(),
             brandLogo: Joi.string().required(),
@@ -142,7 +142,7 @@ module.exports={
             }
         }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Brand Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

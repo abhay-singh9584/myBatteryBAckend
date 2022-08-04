@@ -16,9 +16,8 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey :'brandId',
         foreignKey :'id'
       }),
-      productModel.hasOne(models.group,{
-        sourceKey :'groupId',
-        foreignKey :'id'
+      productModel.belongsToMany(models.group,{
+        through: 'modelgroup'
       })
     }
   }
@@ -30,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     modelDesc: DataTypes.STRING,
     modelPosition: DataTypes.INTEGER,
     brandId: DataTypes.INTEGER,
-    groupId: DataTypes.INTEGER
+
   }, {
     sequelize,
     modelName: 'productModel',

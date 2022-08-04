@@ -12,7 +12,7 @@ module.exports = {
             groupDesc : Joi.string().optional().allow(''),
             groupIcon: Joi.string().optional().allow(''),
             groupBasedOn: Joi.string().required(),
-            };
+        };
         
         const schema = Joi.object(reqObj);
         const { error } = schema.validate(body);
@@ -40,7 +40,7 @@ module.exports = {
         })
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Group Data Added Successfully'))
         }).catch((err)=>{ 
@@ -65,7 +65,7 @@ module.exports = {
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Group Data Found Successfully'))
         }).catch((err)=>{ 
@@ -87,7 +87,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Group Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -131,7 +131,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Group Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Group Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

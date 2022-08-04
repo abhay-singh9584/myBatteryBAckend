@@ -65,7 +65,7 @@ module.exports = {
       })
       .then((Product_data) => {
         if (!Product_data && Product_data.length==0) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No Data Found"),
             NO_DATA
@@ -106,7 +106,7 @@ module.exports = {
     method
       .then((data) => {
         if (!data.length>0) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No Data Found"),
             NO_DATA
@@ -207,7 +207,7 @@ module.exports = {
       )
       .then((Product_data) => {
         if (!Product_data && Product_data.length == 0) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No Data Found"),
             NO_DATA

@@ -61,7 +61,7 @@ module.exports ={
     await segment.create(segmentObj)
         .then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+            return errorResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
         }
         return successResponseData(res,data,SUCCESS,res.__('Segment Added Successfully'))
         }).catch((err)=>{ 
@@ -109,7 +109,7 @@ module.exports ={
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Segment Found Successfully'))
         }).catch((err)=>{ 
@@ -131,7 +131,7 @@ module.exports ={
             }
         }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Data Deleated Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -177,7 +177,7 @@ module.exports ={
         }
       }).then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
+            return errorResponseWithoutData(res, res.__('No Segment Data Found'),NO_DATA)
         }
         return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
     }).catch((err)=>{ 

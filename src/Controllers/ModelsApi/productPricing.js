@@ -30,6 +30,21 @@ module.exports = {
       nlcValue: Joi.number().optional().allow(""),
     };
 
+    const productPricingObj={
+      mrpIcon: body.mrpIcon,
+      mrpUnit: body.mrpUnit,
+      mrpValue: body.mrpValue,
+      mopIcon: body.mopIcon,
+      mopUnit: body.mopUnit,
+      mopValue: body.mopValue,
+      dpIcon: body.dpIcon,
+      dpUnit: body.dpUnit,
+      dpValue: body.dpValue,
+      nlcIcon: body.nlcIcon,
+      nlcUnit: body.nlcUnit,
+      nlcValue: body.nlcValue,
+    }
+
     const schema = Joi.object(reqObj);
     const { error } = schema.validate(body);
 
@@ -40,24 +55,21 @@ module.exports = {
       );
     }
 
+    const productPricingDetail=await productPricing.findOne({where:productPricingObj})
+
+    if(productPricingDetail){
+      return errorResponseWithoutData(
+        res,
+        res.__("Data Already Exists"),
+        FAIL
+      );
+    }
+
     await productPricing
-      .create({
-        mrpIcon: body.mrpIcon,
-        mrpUnit: body.mrpUnit,
-        mrpValue: body.mrpValue,
-        mopIcon: body.mopIcon,
-        mopUnit: body.mopUnit,
-        mopValue: body.mopValue,
-        dpIcon: body.dpIcon,
-        dpUnit: body.dpUnit,
-        dpValue: body.dpValue,
-        nlcIcon: body.nlcIcon,
-        nlcUnit: body.nlcUnit,
-        nlcValue: body.nlcValue,
-      })
+      .create(productPricingObj)
       .then((product_pricing) => {
         if (!product_pricing && product_pricing.length == 0) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No Data Found"),
             NO_DATA
@@ -67,7 +79,7 @@ module.exports = {
           res,
           product_pricing,
           SUCCESS,
-          res.__("mrp Data Found Successfully")
+          res.__("Product Pricing Data Created Successfully")
         );
       })
       .catch((err) => {
@@ -80,6 +92,7 @@ module.exports = {
   },
 
   productPricingGetService: async (req, res) => {
+
     const { productId, sortBy } = req.query;
 
     let options = {
@@ -98,7 +111,7 @@ module.exports = {
     method
       .then((data) => {
         if (!data.length>0) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No Data Found"),
             NO_DATA
@@ -122,6 +135,7 @@ module.exports = {
   },
 
   productPricingDeleteController: async (req, res) => {
+
     let productPricingExistingData = await productPricing.findByPk(
       req.params.id
     );
@@ -217,7 +231,7 @@ module.exports = {
       )
       .then((product_pricing) => {
         if (!product_pricing && product_pricing.length == 0) {
-          return successResponseWithoutData(
+          return errorResponseWithoutData(
             res,
             res.__("No Data Found"),
             NO_DATA

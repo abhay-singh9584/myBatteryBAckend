@@ -39,7 +39,7 @@ module.exports = {
         })
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Product Media Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Product Media Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Product Media Data Added Successfully'))
         }).catch((err)=>{ 
@@ -64,7 +64,7 @@ module.exports = {
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Product Media Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Product Media Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Product Media Data Found Successfully'))
         }).catch((err)=>{ 
@@ -87,7 +87,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Product Media Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Product Media Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Product Media Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -127,7 +127,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Product Media Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Product Media Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Product Media Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

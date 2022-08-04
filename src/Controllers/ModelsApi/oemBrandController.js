@@ -24,7 +24,7 @@ module.exports = {
             );
         }
         
-        const oemBrandDetail=oemBrand.findOne({where:{
+        const oemBrandDetail=await oemBrand.findOne({where:{
             OEMBrand: body.OEMBrand,
             OEMBrandImage: body.OEMBrandImage,
             OEMB: body.OEMB} })
@@ -40,7 +40,7 @@ module.exports = {
         })
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('OEM Brand Data Added Successfully'))
         }).catch((err)=>{ 
@@ -65,7 +65,7 @@ module.exports = {
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('OEM Brand Data Found Successfully'))
         }).catch((err)=>{ 
@@ -89,7 +89,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('OEM Brand Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -131,7 +131,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No OEM Brand Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('OEM Brand Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

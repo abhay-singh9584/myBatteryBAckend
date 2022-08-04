@@ -27,9 +27,7 @@ module.exports = {
       brandId: {
         type: Sequelize.INTEGER
       },
-      groupId: {
-        type: Sequelize.INTEGER
-      },
+      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

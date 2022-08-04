@@ -145,14 +145,14 @@ module.exports={
             where : detailsObj
         })    
 
-        if(Details.length>0){
+        if(Details){
             return errorResponseWithoutData(res,res.__('Battery Details Already Exists'),FAIL)
         }
             
       await batteryDetail.create(detailsObj)
       .then((battery_data)=>{
           if(!battery_data){
-              return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+              return errorResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
           }
           return successResponseData(res,battery_data,SUCCESS,res.__('Battery Details Data Found Successfully'))
         }).catch((err)=>{ 
@@ -253,7 +253,7 @@ module.exports={
         method.then((data)=>{
           // console.log(data.length)
           if(!data.length>0){
-              return successResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
+              return errorResponseWithoutData(res, res.__('No Data Found'),NO_DATA)
           }
           return successResponseData(res,data,SUCCESS,res.__('Battery Details Data Found Successfully'))
         }).catch((err)=>{ 

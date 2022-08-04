@@ -44,7 +44,7 @@ module.exports = {
         })
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Sub Category Data Added Successfully'))
         }).catch((err)=>{ 
@@ -54,15 +54,38 @@ module.exports = {
 
      subCategoryGetService : async (req,res,next)=>{
 
-        const {subcategoryId } = req.query;
+        var {subcategoryId , page } = req.query;
+
+        // if(!page){
+        //     page=1
+        // }
+
+        var getCount=await subcategory.findAll()
+
+        const size=getCount.length
+
+        // console.log(size);
+
+        const getPagination = (page) => {
+            const size=3
+            const limit = size ? +size : 2;
+            const offset = page ? page * limit : 0;
+            return { limit, offset };
+        };
+
+        const {limit,offset}=getPagination(page)
+
+        console.log(limit,offset)
 
         let options = {
             where :{},
+            limit,
+            offset,
             attributes : { exclude :["createdAt","updatedAt"] }
         }
 
 
-        let method = subcategory.findAll(options);
+        let method = subcategory.findAndCountAll(options);
 
         if(subcategoryId){
             options['where']['id'] = subcategoryId;
@@ -70,10 +93,11 @@ module.exports = {
         }
 
         method.then((data)=>{
-            if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
-            }
-            return successResponseData(res,data,SUCCESS,res.__('Sub Category Data Found Successfully'))
+            res.send(data)
+            // if(!data.length>0){
+            //     return errorResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
+            // }
+            // return successResponseData(res,data,SUCCESS,res.__('Sub Category Data Found Successfully'))
         }).catch((err)=>{ 
             return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
          })
@@ -93,7 +117,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Sub Category Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -139,7 +163,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Sub Category Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Sub Category Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

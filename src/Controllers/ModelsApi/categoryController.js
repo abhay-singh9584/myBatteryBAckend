@@ -53,7 +53,7 @@ module.exports = {
             })
             .then((data)=>{
                 if(!data){
-                    return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
+                    return errorResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
                 }
                 return successResponseData(res,data,SUCCESS,res.__('Category Data Added Successfully'))
             }).catch((err)=>{ 
@@ -84,7 +84,7 @@ module.exports = {
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('Category Data Found Successfully'))
         }).catch((err)=>{ 
@@ -106,7 +106,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Category Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -152,7 +152,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No Category Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Category Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

@@ -113,5 +113,9 @@
 	"BatteryBrand Position Already Exists": "BatteryBrand Position Already Exists",
 	"No Model Exists With Given Id": "No Model Exists With Given Id",
 	"productModel Already Exists": "productModel Already Exists",
-	"OEM Brand Already Exist": "OEM Brand Already Exist"
+	"OEM Brand Already Exist": "OEM Brand Already Exist",
+	"Brand Data Created Successfully": "Brand Data Created Successfully",
+	"No scheme Data Found": "No scheme Data Found",
+	"No Sub Category Data Found": "No Sub Category Data Found",
+	"No Group Exists With Given Id": "No Group Exists With Given Id"
 }

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class scheme extends Model {
+  class schemegroup extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,21 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      scheme.belongsToMany(models.group,{
-        through: 'schemegroup'
-      })
     }
   }
-  scheme.init({
-    schemeName: DataTypes.STRING,
-    schemeType: DataTypes.STRING,
-    schemeDesc: DataTypes.STRING,
-    schemeUrl: DataTypes.STRING,
-
+  schemegroup.init({
+    groupId: DataTypes.INTEGER,
+    schemeId: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'scheme',
-    tableName: 'schemes'
+    modelName: 'schemegroup',
+    tableName: 'schemegroups'
   });
-  return scheme;
+  return schemegroup;
 };

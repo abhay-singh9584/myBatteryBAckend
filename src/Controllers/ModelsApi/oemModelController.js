@@ -53,7 +53,7 @@ module.exports = {
         })
         .then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('OEM Model Data Added Successfully'))
         }).catch((err)=>{ 
@@ -89,7 +89,7 @@ module.exports = {
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('OEM Model Data Found Successfully'))
         }).catch((err)=>{ 
@@ -113,7 +113,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('OEM Model Data Deleted Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -159,7 +159,7 @@ module.exports = {
             }
           }).then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No OEM Model Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('OEM Model Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

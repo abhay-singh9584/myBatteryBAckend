@@ -1,4 +1,4 @@
-const {scheme,group}=require('../../models')
+const {scheme,group,schemegroup}=require('../../models')
 const {successResponseData,validationMessageKey, successResponseWithoutData, errorResponseWithoutData, errorResponseData, validationErrorResponseData}=require('../../Helper/Responce')
 const Joi = require('joi')
 const { SUCCESS, FAIL, NO_DATA } = require('../../Helper/Constant')
@@ -7,13 +7,13 @@ module.exports ={
 
     createScheme : async (req,res)=>{
 
-        body=req.body
+        const body=req.body
         const reqObj = {
             schemeName: Joi.string().required(),
             schemeType: Joi.string().optional().allow(''),
             schemeDesc : Joi.string().optional().allow(''),
-            schemeUrl: Joi.string().required(),
-            schemeGroupId: Joi.number().required(),
+            schemeUrl: Joi.string().optional(),
+            schemeGroupId:Joi.array().required()
         };
 
         const schema = Joi.object(reqObj);
@@ -26,39 +26,54 @@ module.exports ={
             );
         }
 
-        let groupDetails = await group.findByPk(body.schemeGroupId);
+        // let groupDetails = await group.findByPk(body.schemeGroupId);
 
-        if(!groupDetails){
-            return errorResponseWithoutData(
-                res,res.__('No Group Exists With Given Id'),FAIL)
-        }
+        // if(!groupDetails){
+        //     return errorResponseWithoutData(
+        //         res,res.__('No Group Exists With Given Id'),FAIL)
+        // }
 
         let schemeObj = {
             schemeName: body.schemeName,
             schemeType: body.schemeType,
             schemeDesc: body.schemeDesc,
             schemeUrl: body.schemeUrl,
-            schemeGroupId: body.schemeGroupId,
         }
 
-        let schemeDetails =  await scheme.findOne({
-            where : {schemeName : body.schemeName 
-                , schemeGroupId : body.schemeGroupId 
-            }})
+        const groupIdArray=body.schemeGroupId
 
-        if(schemeDetails){
-            return errorResponseWithoutData(res,res.__('Scheme Already Exists'),FAIL)
-        }
 
+        
     await scheme.create(schemeObj)
         .then((data)=>{
         if(!data){
-            return successResponseWithoutData(res, res.__(res.__('Something Went Wrong')),NO_DATA)
+            return errorResponseWithoutData(res, res.__(res.__('No Scheme Data Found')),NO_DATA)
         }
-        return successResponseData(res,data,SUCCESS,res.__('scheme Added Successfully'))
+
+        const schemeGroupObj=[]
+
+        groupIdArray.forEach(async (groupData,i)=>{
+
+
+            const obj={
+                groupId:groupData,
+                schemeId:data.id,
+            }
+            schemeGroupObj.push(obj)
+
+        })
+        schemegroup.bulkCreate(schemeGroupObj)
+        .then((groupScheme)=>{
+            if(!groupScheme.length>0){
+                return errorResponseWithoutData(res, res.__('No scheme Data Found'),NO_DATA)
+            }
+            return successResponseData(res,groupScheme,SUCCESS,res.__('scheme Found Successfully'))
+        })
         }).catch((err)=>{ 
+            console.log(err);
             return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
+    
     },
 
     schemeGetService : async (req,res)=>{
@@ -70,7 +85,7 @@ module.exports ={
                 {
                     model : group,
                     attributes :["id","groupName"],
-                    where :{}
+                    where : {}
                 }
             ],
             attributes : { exclude :["createdAt","updatedAt"] }
@@ -89,10 +104,11 @@ module.exports ={
 
         method.then((data)=>{
             if(!data.length>0){
-                return successResponseWithoutData(res, res.__('No scheme Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No scheme Data Found'),NO_DATA)
             }
             return successResponseData(res,data,SUCCESS,res.__('scheme Found Successfully'))
         }).catch((err)=>{ 
+            console.log(err);
             return errorResponseWithoutData(res,res.__('Something Went Wrong'),FAIL)
         })
     },
@@ -111,7 +127,7 @@ module.exports ={
             }
         }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No scheme Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No scheme Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Data Deleated Successfully'),SUCCESS)
         }).catch((err)=>{ 
@@ -127,7 +143,7 @@ module.exports ={
             schemeType: Joi.string().optional().allow(''),
             schemeDesc : Joi.string().optional().allow(''),
             schemeUrl: Joi.string().required(),
-            schemeGroupId: Joi.number().required(),
+            
             };
         
         const schema = Joi.object(reqObj);
@@ -150,14 +166,13 @@ module.exports ={
             schemeType: body.schemeType,
             schemeDesc: body.schemeDesc,
             schemePosition: body.schemePosition,
-            schemeGroupName: body.schemeLogo,
         }, {
             where: {
             id:req.params.id
             }
         }).then((data)=>{
             if(!data){
-                return successResponseWithoutData(res, res.__('No scheme Data Found'),NO_DATA)
+                return errorResponseWithoutData(res, res.__('No scheme Data Found'),NO_DATA)
             }
             return successResponseWithoutData(res,res.__('Data Updated Successfully'),SUCCESS)
         }).catch((err)=>{ 

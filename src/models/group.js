@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      group.belongsToMany(models.scheme,{
+        through: 'schemegroup'
+      }),
+      group.belongsToMany(models.productModel,{
+        through: 'modelgroup'
+      })
     }
   }
   group.init({
